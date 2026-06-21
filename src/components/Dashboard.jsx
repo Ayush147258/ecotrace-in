@@ -12,10 +12,11 @@ export default function Dashboard({ emissions, ecoScore, userName, city, state }
   const scoreRatio = Math.max(0, Math.min(1000, ecoScore.score)) / 1000;
   const strokeDashoffset = circleCircumference * (1 - scoreRatio);
   
-  // Dynamic ring color
-  let ringColor = "#E85D2C"; // red
-  if (ecoScore.score >= 700) ringColor = "#0F4C3A"; // green
-  else if (ecoScore.score >= 400) ringColor = "#C99A3B"; // yellow
+  // Dynamic ring color — encouraging palette
+  let ringColor = '#C99A3B';
+  if (ecoScore.score >= 650) ringColor = '#4ADE80';
+  else if (ecoScore.score >= 450) ringColor = '#C99A3B';
+  else ringColor = '#F08152';
 
   // Max width for bars is the maximum category emission or 100
   const maxCategory = Math.max(

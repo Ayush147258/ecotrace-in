@@ -40,13 +40,13 @@ export default function DashboardPage() {
   return (
     <div className="shell">
       <ProfileSettings onUpdate={refreshData} />
-      
-      <Dashboard 
-        emissions={data.emissions} 
-        ecoScore={data.ecoScore} 
-        userName={data.answers.name} 
-        city={data.answers.city} 
-        state={data.answers.state} 
+
+      <Dashboard
+        emissions={data.emissions}
+        ecoScore={data.ecoScore}
+        userName={data.answers.name}
+        city={data.answers.city}
+        state={data.answers.state}
       />
       
       <div className="two-col">

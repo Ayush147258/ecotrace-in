@@ -2,39 +2,51 @@ import { INDIA_BENCHMARKS } from '../utils/emissionFactors';
 
 export const useEcoScore = () => {
   const calculateEcoScore = (emissions) => {
-    if (!emissions) return null;
+    if (!emissions || Number.isNaN(emissions.total)) return null;
 
-    let score = 1000;
-    
-    // Deduct: (total_monthly_kg / INDIA_BENCHMARKS.national_avg_monthly) * 500
-    const deduct = (emissions.total / INDIA_BENCHMARKS.national_avg_monthly) * 500;
-    score -= deduct;
+    // Start generously — tracking your footprint is already a win
+    let score = 820;
 
-    // Bonus: for each category below India avg (approximated categories to 20% each of national avg for now)
+    // Gentler deduction curve vs national average
+    const ratio = emissions.total / INDIA_BENCHMARKS.national_avg_monthly;
+    score -= ratio * 280;
+
+    // Bonus for each category below the per-category average
     const catAvg = INDIA_BENCHMARKS.national_avg_monthly / 5;
-    if (emissions.transport < catAvg) score += 50;
-    if (emissions.food < catAvg) score += 50;
-    if (emissions.energy < catAvg) score += 50;
-    if (emissions.shopping < catAvg) score += 50;
-    if (emissions.waste < catAvg) score += 50;
+    const categories = ['transport', 'food', 'energy', 'shopping', 'waste'];
+    categories.forEach((cat) => {
+      if (emissions[cat] < catAvg) score += 40;
+    });
 
-    score = Math.max(0, Math.min(1000, Math.round(score)));
+    // Bonus for taking the quiz and starting the journey
+    score += 60;
 
-    let grade = 'F';
-    let level = 'Needs Work';
-    let color = 'text-red-500';
+    // Floor ensures nobody feels demotivated on day one
+    score = Math.max(420, Math.min(1000, Math.round(score)));
 
-    if (score >= 900) { grade = 'A+'; level = 'Eco Champion'; color = 'text-emerald-500'; }
-    else if (score >= 800) { grade = 'A'; level = 'Green Hero'; color = 'text-emerald-400'; }
-    else if (score >= 650) { grade = 'B'; level = 'Climate Aware'; color = 'text-green-400'; }
-    else if (score >= 500) { grade = 'C'; level = 'Average'; color = 'text-yellow-400'; }
-    else if (score >= 350) { grade = 'D'; level = 'Needs Work'; color = 'text-orange-400'; }
+    let grade = 'C';
+    let level = 'Room to Grow';
+    let color = 'text-yellow-400';
 
-    let percentile = 0;
-    if (score >= 800) percentile = 90;
-    else if (score >= 600) percentile = 70;
-    else if (score >= 400) percentile = 50;
-    else percentile = 30;
+    if (score >= 850) {
+      grade = 'A+'; level = 'Eco Champion'; color = 'text-emerald-500';
+    } else if (score >= 750) {
+      grade = 'A'; level = 'Green Hero'; color = 'text-emerald-400';
+    } else if (score >= 650) {
+      grade = 'B+'; level = 'Rising Star'; color = 'text-green-400';
+    } else if (score >= 550) {
+      grade = 'B'; level = 'Climate Aware'; color = 'text-green-400';
+    } else if (score >= 450) {
+      grade = 'C+'; level = 'On the Right Track'; color = 'text-yellow-400';
+    } else {
+      grade = 'C'; level = 'Every Step Counts'; color = 'text-yellow-400';
+    }
+
+    let percentile = 40;
+    if (score >= 800) percentile = 88;
+    else if (score >= 700) percentile = 72;
+    else if (score >= 550) percentile = 58;
+    else if (score >= 450) percentile = 45;
 
     const diffToAvg = emissions.total - INDIA_BENCHMARKS.national_avg_monthly;
     const vs_india_avg = Math.round((diffToAvg / INDIA_BENCHMARKS.national_avg_monthly) * 100);

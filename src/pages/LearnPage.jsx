@@ -10,26 +10,11 @@ export default function LearnPage() {
   };
 
   const faqs = [
-    {
-      q: t('faq1_q'),
-      a: t('faq1_a')
-    },
-    {
-      q: t('faq2_q'),
-      a: t('faq2_a')
-    },
-    {
-      q: t('faq3_q'),
-      a: t('faq3_a')
-    },
-    {
-      q: t('faq4_q'),
-      a: t('faq4_a')
-    },
-    {
-      q: t('faq5_q'),
-      a: t('faq5_a')
-    }
+    { q: t('learn_f1_q'), a: t('learn_f1_a') },
+    { q: t('learn_f2_q'), a: t('learn_f2_a') },
+    { q: t('learn_f3_q'), a: t('learn_f3_a') },
+    { q: t('learn_f4_q'), a: t('learn_f4_a') },
+    { q: t('learn_f5_q'), a: t('learn_f5_a') },
   ];
 
   return (

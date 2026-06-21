@@ -1,63 +1,75 @@
 import { useState, useEffect } from 'react';
 import { useStorage } from '../hooks/useStorage';
-
-const WEEKLY_CHALLENGES = [
-  { id: 1, title: 'Skip the auto today — walk or cycle', co2: 1.2, money: 80 },
-  { id: 2, title: 'Cook one extra meal at home', co2: 0.8, money: 150 },
-  { id: 3, title: 'Turn off AC 2 hrs earlier tonight', co2: 1.6, money: 40 },
-  { id: 4, title: 'Skip one online order this week', co2: 3.5, money: 200 }
-];
+import { useLang } from '../hooks/useLang';
+import { INDIA_CHALLENGES } from '../data/challenges';
+import { Link } from 'react-router-dom';
 
 export default function Challenges() {
-  const { getChallenges, saveChallenges, getStreak, saveStreak } = useStorage();
-  const [completed, setCompleted] = useState([]);
-  const [streak, setStreak] = useState({ current: 0, longest: 0, last_log_date: null });
+  const { getCurrentWeekKey, getCompletedChallenges, saveChallengeCompletion, getStreak, updateStreakOnLog } = useStorage();
+  const { t } = useLang();
+
+  const [weekKey, setWeekKey] = useState('');
+  const [activeChallenges, setActiveChallenges] = useState([]);
+  const [completedIds, setCompletedIds] = useState([]);
+  const [streak, setStreak] = useState({ current: 0, longest: 0, lastLogDate: null });
 
   useEffect(() => {
-    setCompleted(getChallenges());
+    const currentWeek = getCurrentWeekKey();
+    setWeekKey(currentWeek);
+
+    // Grab the first 3 challenges of the week batch (Dashboard preview)
+    const weekNumberMatch = currentWeek.match(/W(\d+)/);
+    const weekNumber = weekNumberMatch ? parseInt(weekNumberMatch[1], 10) : 1;
+    const groupIndex = weekNumber % 3;
+    const startIndex = groupIndex * 7;
+    
+    // Only show 3 on dashboard to save space
+    setActiveChallenges(INDIA_CHALLENGES.slice(startIndex, startIndex + 3));
+    setCompletedIds(getCompletedChallenges(currentWeek));
     setStreak(getStreak());
   }, []);
 
   const toggleChallenge = (id) => {
-    let newCompleted;
-    if (completed.includes(id)) {
-      newCompleted = completed.filter(c => c !== id);
-    } else {
-      newCompleted = [...completed, id];
+    if (!completedIds.includes(id)) {
+      saveChallengeCompletion(weekKey, id);
+      setCompletedIds([...completedIds, id]);
+      setStreak(updateStreakOnLog()); // Also bumps streak
     }
-    setCompleted(newCompleted);
-    saveChallenges(newCompleted);
   };
 
   return (
     <div className="card">
       <div className="section-head">
-        <h3>This week's challenges</h3>
-        <span className="week-progress">{completed.length} / 4 done</span>
+        <h3>{t('nav_challenges')}</h3>
+        <span className="week-progress">{completedIds.length} / 7 {t('chal_done')}</span>
       </div>
 
       <div className="streak-banner">
         <div className="streak-left">
           <div className="streak-num">🔥 {streak.current}</div>
-          <div className="streak-label">day streak</div>
+          <div className="streak-label">{t('chal_day_streak')}</div>
         </div>
-        <div className="streak-sub">Longest: {streak.longest} days<br/>Keep logging daily</div>
+        <div className="streak-sub">{t('chal_longest')}: {streak.longest}<br/>{t('chal_keep')}</div>
       </div>
 
-      {WEEKLY_CHALLENGES.map(c => {
-        const isDone = completed.includes(c.id);
+      {activeChallenges.map(c => {
+        const isDone = completedIds.includes(c.id);
         return (
           <div className="chal-row" key={c.id} onClick={() => toggleChallenge(c.id)}>
             <div className={`chal-check ${isDone ? 'done' : ''}`}>{isDone ? '✓' : ''}</div>
             <div className="chal-text">
               <div className={`chal-title ${isDone ? 'done' : ''}`}>{c.title}</div>
               <div className="chal-impact">
-                {isDone ? 'Saved' : 'Saves'} {c.co2} kg CO₂ · ₹{c.money}
+                {isDone ? t('chal_saved') : t('chal_saves')} {c.co2SavedKg} kg CO₂ · ₹{c.moneySavedInr}
               </div>
             </div>
           </div>
         );
       })}
+      
+      <Link to="/challenges" style={{ display: 'block', textAlign: 'center', marginTop: '16px', color: 'var(--color-banyan)', fontWeight: 600, textDecoration: 'none', fontSize: '14px' }}>
+        View all challenges →
+      </Link>
     </div>
   );
 }

@@ -10,17 +10,17 @@ export default function Nav() {
   const location = useLocation();
   const user = getCurrentUser();
   const hasData = !!getQuizData();
-  
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // If no user is logged in, only show the logo (and lang toggle)
   if (!user) {
     return (
       <nav className="nav">
         <Link to="/" className="brand">EcoTrace India</Link>
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-          <div className="lang-toggle" onClick={() => setLang(lang === 'en' ? 'hi' : 'en')} style={{ cursor: 'pointer', fontWeight: 600, opacity: 0.8 }}>
+        <div />
+        <div className="nav-right">
+          <div className="lang-toggle" onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}>
             {lang === 'en' ? 'EN / हिं' : 'हिं / EN'}
           </div>
         </div>
@@ -28,9 +28,8 @@ export default function Nav() {
     );
   }
 
-  // Get Avatar Initials
   const getInitials = (name) => {
-    if (!name) return "G";
+    if (!name) return 'GU';
     return name.substring(0, 2).toUpperCase();
   };
 
@@ -38,19 +37,19 @@ export default function Nav() {
     { path: '/dashboard', label: t('nav_dashboard') },
     { path: '/challenges', label: t('nav_challenges') },
     { path: '/progress', label: t('nav_progress') },
-    { path: '/learn', label: t('nav_learn') }
+    { path: '/learn', label: t('nav_learn') },
   ];
 
   return (
     <>
       <nav className="nav">
-        <Link to={hasData ? "/dashboard" : "/"} className="brand">EcoTrace India</Link>
-        
-        <div className="nav-tabs desktop-tabs" style={{ display: 'flex', gap: '8px' }}>
-          {navLinks.map(link => (
-            <Link 
+        <Link to={hasData ? '/dashboard' : '/'} className="brand">EcoTrace India</Link>
+
+        <div className="nav-center">
+          {navLinks.map((link) => (
+            <Link
               key={link.path}
-              to={link.path} 
+              to={link.path}
               className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
             >
               {link.label}
@@ -58,27 +57,38 @@ export default function Nav() {
           ))}
         </div>
 
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <div className="lang-toggle" onClick={() => setLang(lang === 'en' ? 'hi' : 'en')} style={{ cursor: 'pointer', fontWeight: 600, opacity: 0.8 }}>
+        <div className="nav-right">
+          <div className="lang-toggle" onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}>
             {lang === 'en' ? 'EN / हिं' : 'हिं / EN'}
           </div>
-          
+
           <div style={{ position: 'relative' }}>
-            <div 
+            <div
+              className="avatar"
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--color-banyan)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '14px', cursor: 'pointer' }}
+              style={{ cursor: 'pointer' }}
             >
               {getInitials(user.name)}
             </div>
-            
+
             {dropdownOpen && (
-              <div style={{ position: 'absolute', top: '48px', right: '0', background: 'white', border: '1px solid var(--color-line)', borderRadius: '12px', padding: '8px', width: '120px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', zIndex: 100 }}>
-                <button 
+              <div style={{
+                position: 'absolute', top: '48px', right: 0,
+                background: 'white', border: '1px solid var(--color-line)',
+                borderRadius: '12px', padding: '8px', width: '140px',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.1)', zIndex: 100,
+              }}>
+                <button
                   onClick={() => {
                     logout();
                     window.location.href = '/';
                   }}
-                  style={{ width: '100%', padding: '8px', textAlign: 'left', background: 'transparent', border: 'none', color: 'var(--color-marigold)', fontWeight: 600, cursor: 'pointer', borderRadius: '6px' }}
+                  style={{
+                    width: '100%', padding: '10px 12px', textAlign: 'left',
+                    background: 'transparent', border: 'none',
+                    color: 'var(--color-marigold)', fontWeight: 600,
+                    cursor: 'pointer', borderRadius: '8px', fontSize: '14px',
+                  }}
                 >
                   {t('nav_logout')}
                 </button>
@@ -86,27 +96,35 @@ export default function Nav() {
             )}
           </div>
 
-          <button 
+          <button
             className="mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{ display: 'none', background: 'transparent', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: '5px' }}
+            aria-label="Menu"
+            style={{ display: 'none', background: 'transparent', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: '5px', padding: '4px' }}
           >
-            <div style={{ width: '24px', height: '2px', background: 'var(--color-ink)', transition: 'all 0.3s' }}></div>
-            <div style={{ width: '24px', height: '2px', background: 'var(--color-ink)', transition: 'all 0.3s' }}></div>
-            <div style={{ width: '24px', height: '2px', background: 'var(--color-ink)', transition: 'all 0.3s' }}></div>
+            <div style={{ width: '22px', height: '2px', background: 'var(--color-ink)', borderRadius: '2px' }} />
+            <div style={{ width: '22px', height: '2px', background: 'var(--color-ink)', borderRadius: '2px' }} />
+            <div style={{ width: '22px', height: '2px', background: 'var(--color-ink)', borderRadius: '2px' }} />
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div style={{ position: 'fixed', top: '70px', left: 0, right: 0, background: 'rgba(247, 243, 233, 0.95)', backdropFilter: 'blur(10px)', zIndex: 99, padding: '20px', borderBottom: '1px solid var(--color-line)', display: 'flex', flexDirection: 'column', gap: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)' }}>
-          {navLinks.map(link => (
-            <Link 
+        <div style={{
+          position: 'fixed', top: '58px', left: 0, right: 0,
+          background: 'rgba(247, 243, 233, 0.97)', backdropFilter: 'blur(12px)',
+          zIndex: 99, padding: '16px 20px',
+          borderBottom: '1px solid var(--color-line)',
+          display: 'flex', flexDirection: 'column', gap: '4px',
+          boxShadow: '0 10px 25px rgba(0,0,0,0.06)',
+        }}>
+          {navLinks.map((link) => (
+            <Link
               key={link.path}
-              to={link.path} 
+              to={link.path}
               onClick={() => setMobileMenuOpen(false)}
-              style={{ padding: '12px 16px', borderRadius: '12px', background: location.pathname === link.path ? 'var(--color-paper-2)' : 'transparent', color: 'var(--color-ink)', fontWeight: 700, fontSize: '16px', textDecoration: 'none' }}
+              className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
+              style={{ padding: '12px 16px', fontSize: '16px' }}
             >
               {link.label}
             </Link>
