@@ -200,7 +200,8 @@ npm install
 cp .env.example .env
 
 npm run dev
-npm test          # run unit & component tests
+npm test          # run unit & component tests (Vitest)
+npm run test:e2e  # run end-to-end tests (Cypress)
 npm run test:coverage
 npm run lint
 ```
@@ -221,12 +222,12 @@ See [TESTING.md](./TESTING.md) for full test documentation.
 
 > *Add 3–4 screenshots here before submitting: Landing page, EcoScore dashboard, AI Coach panel, Challenges page. Visual proof matters more than text for judges skimming fast — this is the single highest-leverage thing left to do in this README.*
 
-```markdown
+
 <p align="center">
   <img src="./screenshots/englishdasboard.png" width="48%">
   <img src="./screenshots/hindi_dashboard.png" width="48%">
 </p>
-```
+
 
 ---
 
