@@ -49,7 +49,7 @@ Do not include markdown blocks like \`\`\`json. Return just the raw JSON.`;
         if (res.ok) {
           const data = await res.json();
           let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          text = text.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
+          text = text.replace(/```json/g, '').replace(/```/g, '').trim();
           const parsed = JSON.parse(text);
           if (Array.isArray(parsed) && parsed.length >= 3) {
             setTips(parsed.slice(0, 3));
@@ -81,7 +81,7 @@ Do not include markdown blocks like \`\`\`json. Return just the raw JSON.`;
         if (res.ok) {
           const data = await res.json();
           let text = data.choices?.[0]?.message?.content || '';
-          text = text.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
+          text = text.replace(/```json/g, '').replace(/```/g, '').trim();
           const parsed = JSON.parse(text);
           if (Array.isArray(parsed) && parsed.length >= 3) {
             setTips(parsed.slice(0, 3));
@@ -112,7 +112,7 @@ Do not include markdown blocks like \`\`\`json. Return just the raw JSON.`;
         if (res.ok) {
           const data = await res.json();
           let text = data.choices?.[0]?.message?.content || '';
-          text = text.replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
+          text = text.replace(/```json/g, '').replace(/```/g, '').trim();
           const parsed = JSON.parse(text);
           if (Array.isArray(parsed) && parsed.length >= 3) {
             setTips(parsed.slice(0, 3));

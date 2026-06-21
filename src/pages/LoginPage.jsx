@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logIn, signUp, continueAsGuest } from '../utils/auth';
+import { logIn, signUp } from '../utils/auth';
 import { useLang } from '../hooks/useLang';
 
 export default function LoginPage() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirm: '' });
   const [error, setError] = useState('');
-  
+
   const navigate = useNavigate();
   const { t } = useLang();
 
@@ -40,8 +40,7 @@ export default function LoginPage() {
         setError('Name must be at least 2 characters');
         return;
       }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
+      if (!formData.email.includes('@')) {
         setError('Invalid email format');
         return;
       }
@@ -63,61 +62,120 @@ export default function LoginPage() {
     }
   };
 
-  const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--color-line)', marginBottom: '16px', fontSize: '16px', background: 'white' };
+  const inputStyle = {
+    width: '100%', padding: '12px 16px', borderRadius: '12px',
+    border: '1px solid var(--color-line)', marginBottom: '16px',
+    fontSize: '16px', background: 'white',
+  };
 
   return (
-    <div className="shell" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-      <div className="card" style={{ width: '100%', maxWidth: '440px', padding: '40px', background: 'var(--color-paper-2)' }}>
-        
-        {/* Toggle UI */}
-        <div style={{ display: 'flex', background: 'white', padding: '6px', borderRadius: '30px', marginBottom: '32px' }}>
-          <button 
+    <div className="shell login-shell">
+      <div className="card login-card">
+        <div className="login-toggle" role="tablist" aria-label="Authentication mode">
+          <button
             type="button"
+            role="tab"
+            aria-selected={!isLoginMode}
             onClick={() => { setIsLoginMode(false); setError(''); }}
-            style={{ flex: 1, padding: '12px', borderRadius: '24px', fontWeight: 700, border: 'none', cursor: 'pointer', transition: 'all 0.2s', background: !isLoginMode ? 'var(--color-banyan)' : 'transparent', color: !isLoginMode ? 'white' : 'var(--color-ink)' }}
+            className={`login-tab ${!isLoginMode ? 'active' : ''}`}
           >
             {t('login_btn_signup')}
           </button>
-          <button 
+          <button
             type="button"
+            role="tab"
+            aria-selected={isLoginMode}
             onClick={() => { setIsLoginMode(true); setError(''); }}
-            style={{ flex: 1, padding: '12px', borderRadius: '24px', fontWeight: 700, border: 'none', cursor: 'pointer', transition: 'all 0.2s', background: isLoginMode ? 'var(--color-banyan)' : 'transparent', color: isLoginMode ? 'white' : 'var(--color-ink)' }}
+            className={`login-tab ${isLoginMode ? 'active' : ''}`}
           >
             {t('login_btn_login')}
           </button>
         </div>
 
-        <h2 className="display" style={{ fontSize: '28px', color: 'var(--color-banyan-deep)', marginBottom: '24px', textAlign: 'center' }}>
+        <h1 className="display login-title">
           {isLoginMode ? t('login_title_login') : t('login_title_signup')}
-        </h2>
+        </h1>
 
         {error && (
-          <div style={{ background: '#FEE2E2', color: '#B91C1C', padding: '12px', borderRadius: '8px', marginBottom: '20px', fontSize: '14px', fontWeight: 600, textAlign: 'center' }}>
+          <div role="alert" aria-live="assertive" className="login-error">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {!isLoginMode && (
-            <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder={t('login_name')} style={inputStyle} />
+            <div className="form-field">
+              <label htmlFor="login-name">{t('login_name')}</label>
+              <input
+                id="login-name"
+                type="text"
+                name="name"
+                autoComplete="name"
+                required
+                minLength={2}
+                value={formData.name}
+                onChange={handleChange}
+                style={inputStyle}
+              />
+            </div>
           )}
-          <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder={t('login_email')} style={inputStyle} />
-          <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder={t('login_password')} style={inputStyle} />
+          <div className="form-field">
+            <label htmlFor="login-email">{t('login_email')}</label>
+            <input
+              id="login-email"
+              type="email"
+              name="email"
+              autoComplete="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              aria-invalid={!!error}
+              style={inputStyle}
+            />
+          </div>
+          <div className="form-field">
+            <label htmlFor="login-password">{t('login_password')}</label>
+            <input
+              id="login-password"
+              type="password"
+              name="password"
+              autoComplete={isLoginMode ? 'current-password' : 'new-password'}
+              required
+              minLength={6}
+              value={formData.password}
+              onChange={handleChange}
+              aria-invalid={!!error}
+              style={inputStyle}
+            />
+          </div>
           {!isLoginMode && (
-            <input type="password" name="confirm" value={formData.confirm} onChange={handleChange} placeholder={t('login_confirm_password')} style={inputStyle} />
+            <div className="form-field">
+              <label htmlFor="login-confirm">{t('login_confirm_password')}</label>
+              <input
+                id="login-confirm"
+                type="password"
+                name="confirm"
+                autoComplete="new-password"
+                required
+                minLength={6}
+                value={formData.confirm}
+                onChange={handleChange}
+                aria-invalid={!!error}
+                style={inputStyle}
+              />
+            </div>
           )}
 
-          <button type="submit" className="btn" style={{ width: '100%', background: 'var(--color-banyan)', color: 'white', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, marginTop: '8px', border: 'none', cursor: 'pointer' }}>
+          <button type="submit" className="btn-primary login-submit">
             {isLoginMode ? t('login_btn_login') : t('login_btn_signup')}
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '24px' }}>
-          <button onClick={handleToggle} style={{ background: 'transparent', border: 'none', color: 'var(--color-ink)', opacity: 0.7, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>
+        <div className="login-switch">
+          <button type="button" onClick={handleToggle} className="login-switch-btn">
             {isLoginMode ? t('login_switch_to_signup') : t('login_switch_to_login')}
           </button>
         </div>
-
       </div>
     </div>
   );

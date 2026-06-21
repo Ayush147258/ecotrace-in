@@ -7,6 +7,14 @@ export const strings = {
     nav_learn: "Learn",
     nav_logout: "Log Out",
 
+    // Accessibility
+    a11y_skip_to_main: "Skip to main content",
+    a11y_main_nav: "Main navigation",
+    a11y_lang_toggle: "Switch language between English and Hindi",
+    a11y_user_menu: "User account menu",
+    a11y_open_menu: "Open navigation menu",
+    a11y_close_menu: "Close navigation menu",
+
     // Landing
     landing_hero_title: "Track your footprint. Protect our future.",
     landing_hero_subtitle: "EcoTrace India helps you understand your environmental impact and make sustainable choices every day.",
@@ -335,6 +343,14 @@ export const strings = {
     nav_progress: "प्रगति",
     nav_learn: "सीखें",
     nav_logout: "लॉग आउट",
+
+    // Accessibility
+    a11y_skip_to_main: "मुख्य सामग्री पर जाएं",
+    a11y_main_nav: "मुख्य नेविगेशन",
+    a11y_lang_toggle: "अंग्रेज़ी और हिंदी के बीच भाषा बदलें",
+    a11y_user_menu: "उपयोगकर्ता खाता मेनू",
+    a11y_open_menu: "नेविगेशन मेनू खोलें",
+    a11y_close_menu: "नेविगेशन मेनू बंद करें",
 
     // Landing
     landing_hero_title: "अपने फुटप्रिंट को ट्रैक करें। भविष्य सुरक्षित करें।",

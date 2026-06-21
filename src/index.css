@@ -33,6 +33,28 @@
   ::selection { background-color: var(--color-marigold-pale); }
   a { color: inherit; text-decoration: none; }
   button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  :focus-visible {
+    outline: 2px solid var(--color-marigold);
+    outline-offset: 2px;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+  .skip-link {
+    position: absolute; top: -100px; left: 16px; z-index: 100;
+    padding: 10px 18px; background: var(--color-banyan); color: white;
+    font-weight: 700; font-size: 14px; border-radius: 8px;
+    transition: top 0.2s;
+  }
+  .skip-link:focus { top: 16px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 @layer components {
@@ -106,10 +128,9 @@
     justify-self: end;
   }
   .lang-toggle {
-    display: flex; border: 1px solid var(--color-line); border-radius: 20px; overflow: hidden; font-size: 12px; font-weight: 700; cursor: pointer;
-    padding: 6px 12px;
-    background: white;
-    transition: border-color 0.2s;
+    display: flex; border: 1px solid var(--color-line); border-radius: 20px; overflow: hidden;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    padding: 6px 12px; background: white; transition: border-color 0.2s;
   }
   .lang-toggle:hover { border-color: var(--color-banyan); }
   .lang-toggle span { padding: 6px 13px; transition: all 0.2s; }
@@ -159,6 +180,46 @@
     .nav-center, .desktop-tabs { display: none !important; }
     .mobile-menu-btn { display: flex !important; }
     .nav { padding: 12px 20px; grid-template-columns: 1fr auto; }
+  }
+
+  .mobile-menu-btn {
+    display: none; background: transparent; border: none; cursor: pointer;
+    flex-direction: column; gap: 5px; padding: 4px;
+  }
+  .hamburger-line {
+    display: block; width: 22px; height: 2px;
+    background: var(--color-ink); border-radius: 2px;
+  }
+  .mobile-nav-panel {
+    position: fixed; top: 58px; left: 0; right: 0;
+    background: rgba(247, 243, 233, 0.97); backdrop-filter: blur(12px);
+    z-index: 99; padding: 16px 20px;
+    border-bottom: 1px solid var(--color-line);
+    display: flex; flex-direction: column; gap: 4px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  }
+  .mobile-nav-panel .nav-link { padding: 12px 16px; font-size: 16px; }
+
+  /* ===== login ===== */
+  .login-shell { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+  .login-card { width: 100%; max-width: 440px; padding: 40px; background: var(--color-paper-2); }
+  .login-toggle { display: flex; background: white; padding: 6px; border-radius: 30px; margin-bottom: 32px; }
+  .login-tab {
+    flex: 1; padding: 12px; border-radius: 24px; font-weight: 700; border: none;
+    cursor: pointer; transition: all 0.2s; background: transparent; color: var(--color-ink);
+  }
+  .login-tab.active { background: var(--color-banyan); color: white; }
+  .login-title { font-size: 28px; color: var(--color-banyan-deep); margin-bottom: 24px; text-align: center; }
+  .login-error {
+    background: #FEE2E2; color: #B91C1C; padding: 12px; border-radius: 8px;
+    margin-bottom: 20px; font-size: 14px; font-weight: 600; text-align: center;
+  }
+  .form-field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--color-ink); }
+  .login-submit { width: 100%; padding: 16px; border-radius: 12px; font-size: 16px; margin-top: 8px; }
+  .login-switch { text-align: center; margin-top: 24px; }
+  .login-switch-btn {
+    background: transparent; border: none; color: var(--color-ink); opacity: 0.7;
+    font-weight: 600; cursor: pointer; text-decoration: underline;
   }
 
   /* ===== layout shell ===== */

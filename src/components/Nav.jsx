@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useStorage } from '../hooks/useStorage';
 import { useLang } from '../hooks/useLang';
 import { getCurrentUser } from '../utils/auth';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Nav() {
   const { getQuizData, logout } = useStorage();
@@ -10,19 +10,42 @@ export default function Nav() {
   const location = useLocation();
   const user = getCurrentUser();
   const hasData = !!getQuizData();
+  const menuRef = useRef(null);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const toggleLang = () => setLang(lang === 'en' ? 'hi' : 'en');
+
+  const LangToggle = () => (
+    <button
+      type="button"
+      className="lang-toggle"
+      onClick={toggleLang}
+      aria-label={t('a11y_lang_toggle')}
+    >
+      {lang === 'en' ? 'EN / हिं' : 'हिं / EN'}
+    </button>
+  );
+
   if (!user) {
     return (
-      <nav className="nav">
+      <nav className="nav" aria-label={t('a11y_main_nav')}>
         <Link to="/" className="brand">EcoTrace India</Link>
         <div />
         <div className="nav-right">
-          <div className="lang-toggle" onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}>
-            {lang === 'en' ? 'EN / हिं' : 'हिं / EN'}
-          </div>
+          <LangToggle />
         </div>
       </nav>
     );
@@ -42,7 +65,7 @@ export default function Nav() {
 
   return (
     <>
-      <nav className="nav">
+      <nav className="nav" aria-label={t('a11y_main_nav')}>
         <Link to={hasData ? '/dashboard' : '/'} className="brand">EcoTrace India</Link>
 
         <div className="nav-center">
@@ -50,6 +73,7 @@ export default function Nav() {
             <Link
               key={link.path}
               to={link.path}
+              aria-current={location.pathname === link.path ? 'page' : undefined}
               className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
             >
               {link.label}
@@ -58,27 +82,34 @@ export default function Nav() {
         </div>
 
         <div className="nav-right">
-          <div className="lang-toggle" onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}>
-            {lang === 'en' ? 'EN / हिं' : 'हिं / EN'}
-          </div>
+          <LangToggle />
 
-          <div style={{ position: 'relative' }}>
-            <div
+          <div style={{ position: 'relative' }} ref={menuRef}>
+            <button
+              type="button"
               className="avatar"
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              style={{ cursor: 'pointer' }}
+              aria-label={t('a11y_user_menu')}
+              aria-expanded={dropdownOpen}
+              aria-haspopup="true"
             >
               {getInitials(user.name)}
-            </div>
+            </button>
 
             {dropdownOpen && (
-              <div style={{
-                position: 'absolute', top: '48px', right: 0,
-                background: 'white', border: '1px solid var(--color-line)',
-                borderRadius: '12px', padding: '8px', width: '140px',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.1)', zIndex: 100,
-              }}>
+              <div
+                role="menu"
+                aria-label={t('a11y_user_menu')}
+                style={{
+                  position: 'absolute', top: '48px', right: 0,
+                  background: 'white', border: '1px solid var(--color-line)',
+                  borderRadius: '12px', padding: '8px', width: '140px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.1)', zIndex: 100,
+                }}
+              >
                 <button
+                  type="button"
+                  role="menuitem"
                   onClick={() => {
                     logout();
                     window.location.href = '/';
@@ -97,34 +128,35 @@ export default function Nav() {
           </div>
 
           <button
+            type="button"
             className="mobile-menu-btn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menu"
-            style={{ display: 'none', background: 'transparent', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: '5px', padding: '4px' }}
+            aria-label={mobileMenuOpen ? t('a11y_close_menu') : t('a11y_open_menu')}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-menu"
           >
-            <div style={{ width: '22px', height: '2px', background: 'var(--color-ink)', borderRadius: '2px' }} />
-            <div style={{ width: '22px', height: '2px', background: 'var(--color-ink)', borderRadius: '2px' }} />
-            <div style={{ width: '22px', height: '2px', background: 'var(--color-ink)', borderRadius: '2px' }} />
+            <span className="sr-only">{mobileMenuOpen ? t('a11y_close_menu') : t('a11y_open_menu')}</span>
+            <span aria-hidden="true" className="hamburger-line" />
+            <span aria-hidden="true" className="hamburger-line" />
+            <span aria-hidden="true" className="hamburger-line" />
           </button>
         </div>
       </nav>
 
       {mobileMenuOpen && (
-        <div style={{
-          position: 'fixed', top: '58px', left: 0, right: 0,
-          background: 'rgba(247, 243, 233, 0.97)', backdropFilter: 'blur(12px)',
-          zIndex: 99, padding: '16px 20px',
-          borderBottom: '1px solid var(--color-line)',
-          display: 'flex', flexDirection: 'column', gap: '4px',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.06)',
-        }}>
+        <div
+          id="mobile-nav-menu"
+          role="navigation"
+          aria-label={t('a11y_main_nav')}
+          className="mobile-nav-panel"
+        >
           {navLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
               onClick={() => setMobileMenuOpen(false)}
+              aria-current={location.pathname === link.path ? 'page' : undefined}
               className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-              style={{ padding: '12px 16px', fontSize: '16px' }}
             >
               {link.label}
             </Link>

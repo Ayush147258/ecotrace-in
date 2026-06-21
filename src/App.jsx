@@ -8,6 +8,7 @@ import LearnPage from './pages/LearnPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Nav from './components/Nav';
+import SkipLink from './components/SkipLink';
 import ErrorBoundary from './components/ErrorBoundary';
 import { getCurrentUser } from './utils/auth';
 
@@ -62,11 +63,12 @@ export default function App() {
     <ErrorBoundary>
       <BrowserRouter>
         {/* Global CSS Texture Overlay */}
-        <div className="grain"></div>
-        
-        {/* Universal Navigation */}
+        <div className="grain" aria-hidden="true" />
+
+        <SkipLink />
         <Nav />
-        
+
+        <main id="main-content" tabIndex={-1}>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
@@ -107,6 +109,7 @@ export default function App() {
           {/* Catch-all 404 Route */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
+        </main>
       </BrowserRouter>
     </ErrorBoundary>
   );

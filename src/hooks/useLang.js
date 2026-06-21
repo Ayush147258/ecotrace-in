@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react';
 import { strings } from '../utils/i18n';
 
+const getInitialLang = () => {
+  try {
+    return localStorage.getItem('ecotrace_lang') === 'hi' ? 'hi' : 'en';
+  } catch {
+    return 'en';
+  }
+};
+
 export const useLang = () => {
-  const [lang, setLangState] = useState('en');
+  const [lang, setLangState] = useState(getInitialLang);
 
   useEffect(() => {
-    const saved = localStorage.getItem('ecotrace_lang');
-    if (saved === 'hi') {
-      setLangState('hi');
-    }
-  }, []);
+    document.documentElement.lang = lang === 'hi' ? 'hi' : 'en';
+  }, [lang]);
 
   const setLang = (newLang) => {
     localStorage.setItem('ecotrace_lang', newLang);

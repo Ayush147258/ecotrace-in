@@ -15,7 +15,7 @@
 # 🌿 EcoTrace India
 ### India's first carbon footprint tracker built for Indian lives — not Western defaults.
 
-**Live App:** [https://ecotrace-india.vercel.app](https://ecotrace-india.vercel.app)
+**Live App:** [https://ecotrace-in.vercel.app](https://ecotrace-in.vercel.app)
 **Built for:** PromptWars Virtual — Main Challenge 3 (Carbon Footprint Awareness Platform)
 **Author:** Ayush Kumar
 
@@ -192,7 +192,7 @@ Benchmarked against India's national average of **216 kg CO₂/month (2.6 tonnes
 ## 🚀 Running Locally
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/ecotrace-india.git
+git clone https://github.com/Ayush147258/ecotrace-india.git
 cd ecotrace-india
 npm install
 
@@ -200,7 +200,12 @@ npm install
 cp .env.example .env
 
 npm run dev
+npm test          # run unit & component tests
+npm run test:coverage
+npm run lint
 ```
+
+See [TESTING.md](./TESTING.md) for full test documentation.
 
 ### Environment Variables (all free tiers, no credit card required)
 
@@ -236,9 +241,9 @@ npm run dev
 
 ## 🏆 Submission Links
 
-- **Source Code:** `https://github.com/YOUR-USERNAME/ecotrace-india`
-- **Live Application:** `https://ecotrace-india.vercel.app`
-- **LinkedIn Post:** `[add your public post URL here]`
+- **Source Code:** [https://github.com/Ayush147258/ecotrace-india](https://github.com/Ayush147258/ecotrace-india)
+- **Live Application:** [https://ecotrace-in.vercel.app](https://ecotrace-in.vercel.app)
+- **LinkedIn Post:** [PromptWars submission](https://www.linkedin.com/posts/ayush-kumar-2452a2346_promptwars-hackathon-climatetech-ugcPost-7474346613906513922-s-1d/)
 
 ---
 
