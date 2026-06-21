@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import tailwindcss from '@tailwindcss/vite'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   plugins: [
@@ -10,6 +11,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      manifestFilename: 'manifest.json',
       manifest: {
         name: 'EcoTrace India',
         short_name: 'EcoTrace',
@@ -30,6 +32,12 @@ export default defineConfig({
           }
         ]
       }
-    })
+    }),
+    visualizer({ open: false, filename: 'stats.html' })
   ],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/setupTests.js'],
+    globals: true
+  }
 })

@@ -78,97 +78,69 @@ export default function ChallengesPage() {
   const impact = calculateImpact();
 
   return (
-    <div className="shell" style={{ maxWidth: '720px', margin: '0 auto', paddingBottom: '80px' }}>
-      <h1 className="display" style={{ fontSize: '32px', color: 'var(--color-banyan-deep)', marginBottom: '24px' }}>
+    <div className="shell max-w-[720px] mx-auto pb-20">
+      <h1 className="display text-[32px] text-[var(--color-banyan-deep)] mb-6">
         {t('chal_title')}
       </h1>
 
       {/* Streak Banner */}
       <div 
-        className="streak-banner" 
-        style={{ 
-          background: 'linear-gradient(135deg, var(--color-marigold), #E04D1A)', 
-          color: 'white', 
-          borderRadius: '20px', 
-          padding: '24px 30px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          marginBottom: '32px',
-          boxShadow: '0 8px 24px rgba(232,93,44,0.25)'
-        }}
+        className="streak-banner bg-gradient-to-br from-[var(--color-marigold)] to-[#E04D1A] text-white rounded-[20px] px-[30px] py-[24px] flex items-center justify-between mb-8 shadow-[0_8px_24px_rgba(232,93,44,0.25)]" 
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ background: 'rgba(255,255,255,0.2)', width: '56px', height: '56px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>
+        <div className="flex items-center gap-4">
+          <div className="bg-white/20 w-14 h-14 rounded-full flex items-center justify-center text-[28px]">
             🔥
           </div>
           <div>
-            <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, lineHeight: 1 }}>
-              {streak.current} <span style={{ fontSize: '16px', fontWeight: 600, opacity: 0.9, fontFamily: 'var(--font-sans)' }}>{t('chal_days')}</span>
+            <div className="text-[32px] font-[family-name:var(--font-serif)] font-bold leading-none">
+              {streak.current} <span className="text-base font-semibold opacity-90 font-[family-name:var(--font-sans)]">{t('chal_days')}</span>
             </div>
-            <div style={{ fontSize: '14px', fontWeight: 600, opacity: 0.9, marginTop: '4px' }}>
+            <div className="text-sm font-semibold opacity-90 mt-1">
               {getStreakMotivation(streak.current)}
             </div>
           </div>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.8, fontWeight: 700 }}>{t('chal_longest')}</div>
-          <div style={{ fontSize: '20px', fontWeight: 700 }}>{streak.longest} {t('chal_days')}</div>
+        <div className="text-right">
+          <div className="text-xs uppercase tracking-[0.05em] opacity-80 font-bold">{t('chal_longest')}</div>
+          <div className="text-xl font-bold">{streak.longest} {t('chal_days')}</div>
         </div>
       </div>
 
       {/* Weekly Progress Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-ink)' }}>{t('chal_targets')}</h2>
-        <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-banyan)' }}>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold text-[var(--color-ink)]">{t('chal_targets')}</h2>
+        <div className="text-sm font-bold text-[var(--color-banyan)]">
           {completedIds.length} {t('chal_done_week')}
         </div>
       </div>
 
       {/* Challenge Cards List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px' }}>
+      <div className="flex flex-col gap-4 mb-10">
         {activeChallenges.map(challenge => {
           const isDone = completedIds.includes(challenge.id);
           
           return (
             <div 
               key={challenge.id} 
-              className="card"
-              style={{ 
-                padding: '20px', 
-                display: 'flex', 
-                flexDirection: 'column',
-                gap: '12px',
-                background: isDone ? 'var(--color-paper)' : 'white',
-                border: `1px solid ${isDone ? 'var(--color-banyan-pale)' : 'var(--color-line)'}`,
-                transition: 'all 0.3s ease',
-                opacity: isDone ? 0.85 : 1
-              }}
+              className={`card p-5 flex flex-col gap-3 transition-all duration-300 ease-in-out border ${isDone ? 'bg-[var(--color-paper)] border-[var(--color-banyan-pale)] opacity-[0.85]' : 'bg-white border-[var(--color-line)]'}`}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-banyan)' }}>
+              <div className="flex justify-between items-start gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[11px] font-extrabold uppercase tracking-[0.05em] text-[var(--color-banyan)]">
                       {challenge.category}
                     </span>
-                    <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--color-line)' }}></span>
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-ink)', opacity: 0.5 }}>
+                    <span className="w-1 h-1 rounded-full bg-[var(--color-line)]"></span>
+                    <span className="text-[11px] font-bold text-[var(--color-ink)] opacity-50">
                       {challenge.difficulty}
                     </span>
                   </div>
                   <h3 
-                    style={{ 
-                      fontSize: '17px', 
-                      fontWeight: 700, 
-                      color: 'var(--color-ink)', 
-                      marginBottom: '4px',
-                      textDecoration: isDone ? 'line-through' : 'none',
-                      opacity: isDone ? 0.6 : 1
-                    }}
+                    className={`text-[17px] font-bold text-[var(--color-ink)] mb-1 ${isDone ? 'line-through opacity-60' : 'no-underline opacity-100'}`}
                   >
                     {t(challenge.id + '_t')}
                   </h3>
-                  <p style={{ fontSize: '14px', color: 'var(--color-ink)', opacity: 0.65, lineHeight: 1.5 }}>
+                  <p className="text-sm text-[var(--color-ink)] opacity-65 leading-relaxed">
                     {t(challenge.id + '_d')}
                   </p>
                 </div>
@@ -177,15 +149,8 @@ export default function ChallengesPage() {
                 <button 
                   onClick={() => !isDone && handleMarkDone(challenge.id)}
                   disabled={isDone}
-                  style={{
-                    width: '36px', height: '36px', borderRadius: '50%',
-                    border: `2px solid ${isDone ? 'var(--color-banyan)' : 'var(--color-line)'}`,
-                    background: isDone ? 'var(--color-banyan)' : 'white',
-                    color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    cursor: isDone ? 'default' : 'pointer',
-                    transition: 'all 0.2s',
-                    flexShrink: 0
-                  }}
+                  aria-label={t(challenge.id + '_t')}
+                  className={`w-9 h-9 rounded-full border-2 flex items-center justify-center transition-all duration-200 shrink-0 text-white hover:opacity-80 focus:ring-2 focus:ring-[var(--color-banyan)] focus:outline-none ${isDone ? 'border-[var(--color-banyan)] bg-[var(--color-banyan)] cursor-default' : 'border-[var(--color-line)] bg-white cursor-pointer'}`}
                 >
                   {isDone && (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -196,12 +161,12 @@ export default function ChallengesPage() {
               </div>
 
               {/* Badges Row */}
-              <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
-                <div style={{ background: 'var(--color-banyan-pale)', color: 'var(--color-banyan-deep)', fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div className="flex gap-2 mt-1">
+                <div className="bg-[var(--color-banyan-pale)] text-[var(--color-banyan-deep)] text-xs font-bold px-2.5 py-1 rounded-xl flex items-center gap-1">
                   <span>↓</span> {challenge.co2SavedKg} kg CO₂
                 </div>
                 {challenge.moneySavedInr > 0 && (
-                  <div style={{ background: 'var(--color-marigold-pale)', color: '#A8431B', fontSize: '12px', fontWeight: 700, padding: '4px 10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div className="bg-[var(--color-marigold-pale)] text-[#A8431B] text-xs font-bold px-2.5 py-1 rounded-xl flex items-center gap-1">
                     <span>↓</span> ₹{challenge.moneySavedInr}
                   </div>
                 )}
@@ -213,29 +178,22 @@ export default function ChallengesPage() {
 
       {/* Bottom Summary Impact Card */}
       <div 
-        className="card" 
-        style={{ 
-          background: 'var(--color-banyan)', 
-          color: 'white', 
-          textAlign: 'center', 
-          padding: '32px 20px',
-          borderRadius: '24px'
-        }}
+        className="card bg-[var(--color-banyan)] text-white text-center py-8 px-5 rounded-3xl" 
       >
-        <h3 style={{ fontSize: '16px', fontWeight: 600, opacity: 0.9, marginBottom: '16px' }}>{t('chal_impact_title')}</h3>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '32px' }}>
+        <h3 className="text-base font-semibold opacity-90 mb-4">{t('chal_impact_title')}</h3>
+        <div className="flex justify-center gap-8">
           <div>
-            <div style={{ fontSize: '36px', fontFamily: 'var(--font-serif)', fontWeight: 700, lineHeight: 1 }}>{impact.co2}</div>
-            <div style={{ fontSize: '13px', fontWeight: 600, opacity: 0.8, marginTop: '4px' }}>{t('chal_kg_saved')}</div>
+            <div className="text-[36px] font-[family-name:var(--font-serif)] font-bold leading-none">{impact.co2}</div>
+            <div className="text-[13px] font-semibold opacity-80 mt-1">{t('chal_kg_saved')}</div>
           </div>
-          <div style={{ width: '1px', background: 'rgba(255,255,255,0.2)' }}></div>
+          <div className="w-[1px] bg-white/20"></div>
           <div>
-            <div style={{ fontSize: '36px', fontFamily: 'var(--font-serif)', fontWeight: 700, lineHeight: 1 }}>₹{impact.inr}</div>
-            <div style={{ fontSize: '13px', fontWeight: 600, opacity: 0.8, marginTop: '4px' }}>{t('chal_inr_saved')}</div>
+            <div className="text-[36px] font-[family-name:var(--font-serif)] font-bold leading-none">₹{impact.inr}</div>
+            <div className="text-[13px] font-semibold opacity-80 mt-1">{t('chal_inr_saved')}</div>
           </div>
         </div>
         {completedIds.length === 7 && (
-          <div style={{ marginTop: '20px', fontSize: '14px', fontWeight: 700, color: 'var(--color-marigold-pale)' }}>
+          <div className="mt-5 text-sm font-bold text-[var(--color-marigold-pale)]">
             {t('chal_perfect_week')}
           </div>
         )}

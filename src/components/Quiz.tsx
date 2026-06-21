@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getCurrentUser } from '../utils/auth';
 import { useLang } from '../hooks/useLang';
 
@@ -64,71 +65,66 @@ export default function QuizPage() {
     navigate('/dashboard');
   };
 
-  const inputStyle = {
-    width: '100%', padding: '12px 16px', borderRadius: '12px',
-    border: '1px solid var(--color-line)', fontSize: '16px',
-    background: 'white', boxSizing: 'border-box'
-  };
-
-  const labelStyle = { display: 'block', fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: 'var(--color-ink)' };
-
-  const btnGroupStyle = { display: 'flex', flexWrap: 'wrap', gap: '10px' };
+  const inputClass = "w-full p-[12px_16px] rounded-xl border border-[var(--color-line)] text-base bg-white box-border";
+  const labelClass = "block text-sm font-semibold mb-2 text-[var(--color-ink)]";
+  const btnGroupClass = "flex flex-wrap gap-2.5";
   
   const SelectableBtn = ({ field, value, label }) => (
     <button
+      type="button"
       onClick={() => updateAnswer(field, value)}
-      style={{
-        padding: '10px 18px', borderRadius: '20px', fontSize: '14px', fontWeight: 600,
-        background: answers[field] === value ? 'var(--color-banyan)' : 'white',
-        color: answers[field] === value ? 'white' : 'var(--color-ink)',
-        border: `1px solid ${answers[field] === value ? 'var(--color-banyan)' : 'var(--color-line)'}`,
-        cursor: 'pointer', transition: 'all 0.2s'
-      }}
+      className={`px-[18px] py-[10px] rounded-[20px] text-sm font-semibold cursor-pointer transition-all duration-200 border ${answers[field] === value ? 'bg-[var(--color-banyan)] text-white border-[var(--color-banyan)]' : 'bg-white text-[var(--color-ink)] border-[var(--color-line)]'}`}
     >
       {label}
     </button>
   );
 
+  SelectableBtn.propTypes = {
+    field: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
+  };
+
   return (
-    <div className="shell" style={{ maxWidth: '640px', minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+    <div className="shell max-w-[640px] min-h-[80vh] flex flex-col justify-center">
       
-      <div className="card" style={{ padding: '40px' }}>
+      <div className="card p-10">
         
         {/* Progress Bar */}
-        <div style={{ marginBottom: '32px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 700, color: 'var(--color-ink)', opacity: 0.5, marginBottom: '8px' }}>
+        <div className="mb-8">
+          <div className="flex justify-between text-[13px] font-bold text-[var(--color-ink)] opacity-50 mb-2">
             <span>{t('quiz_step')} {step} {t('quiz_of')} 5</span>
             <span>{step * 20}%</span>
           </div>
-          <div style={{ height: '6px', background: 'var(--color-paper-2)', borderRadius: '3px', overflow: 'hidden' }}>
-            <div style={{ height: '100%', background: 'var(--color-banyan)', width: `${step * 20}%`, transition: 'width 0.3s ease-out' }}></div>
+          <div className="h-1.5 bg-[var(--color-paper-2)] rounded-[3px] overflow-hidden">
+            <div className="h-full bg-[var(--color-banyan)] transition-[width] duration-300 ease-out" style={{ width: `${step * 20}%` }}></div>
           </div>
         </div>
 
         {/* STEP 1: Basic Info */}
         {step === 1 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <h2 className="display" style={{ fontSize: '28px' }}>{t('quiz_s1_title')}</h2>
+          <div className="flex flex-col gap-6">
+            <h2 className="display text-[28px]">{t('quiz_s1_title')}</h2>
             <div>
-              <label style={labelStyle}>{t('quiz_q_name')}</label>
-              <input type="text" value={answers.name} onChange={e => updateAnswer('name', e.target.value)} style={inputStyle} placeholder="E.g. Ayush" />
+              <label className={labelClass}>{t('quiz_q_name')}</label>
+              <input type="text" value={answers.name} onChange={e => updateAnswer('name', e.target.value)} className={inputClass} placeholder="E.g. Ayush" />
             </div>
-            <div style={{ display: 'flex', gap: '16px' }}>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t('quiz_q_city')}</label>
-                <input type="text" value={answers.city} onChange={e => updateAnswer('city', e.target.value)} style={inputStyle} placeholder="City Name" />
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className={labelClass}>{t('quiz_q_city')}</label>
+                <input type="text" value={answers.city} onChange={e => updateAnswer('city', e.target.value)} className={inputClass} placeholder="City Name" />
               </div>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t('quiz_q_state')}</label>
-                <select value={answers.state} onChange={e => updateAnswer('state', e.target.value)} style={{ ...inputStyle, WebkitAppearance: 'none' }}>
+              <div className="flex-1">
+                <label className={labelClass}>{t('quiz_q_state')}</label>
+                <select value={answers.state} onChange={e => updateAnswer('state', e.target.value)} className={`${inputClass} appearance-none`}>
                   <option value="">{t('quiz_select_state')}</option>
                   {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_household')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_household')}</label>
+              <div className={btnGroupClass}>
                 {['1', '2', '3', '4', '5+'].map(val => (
                   <SelectableBtn key={val} field="household" value={val} label={val} />
                 ))}
@@ -139,11 +135,11 @@ export default function QuizPage() {
 
         {/* STEP 2: Transport */}
         {step === 2 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <h2 className="display" style={{ fontSize: '28px' }}>{t('quiz_s2_title')}</h2>
+          <div className="flex flex-col gap-6">
+            <h2 className="display text-[28px]">{t('quiz_s2_title')}</h2>
             <div>
-              <label style={labelStyle}>{t('quiz_q_commute')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_commute')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: 'walking', l: t('quiz_c_walk') },
                   { v: 'metro', l: t('quiz_c_metro') },
@@ -159,12 +155,12 @@ export default function QuizPage() {
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_dailykm')}: {answers.dailyKm} km</label>
-              <input type="range" min="0" max="100" value={answers.dailyKm} onChange={e => updateAnswer('dailyKm', parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--color-marigold)' }} />
+              <label className={labelClass}>{t('quiz_q_dailykm')}: {answers.dailyKm} km</label>
+              <input type="range" min="0" max="100" value={answers.dailyKm} onChange={e => updateAnswer('dailyKm', parseInt(e.target.value))} className="w-full accent-[var(--color-marigold)]"  />
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_flights')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_flights')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: '0', l: t('quiz_f_0') },
                   { v: '1-2', l: t('quiz_f_1_2') },
@@ -180,11 +176,11 @@ export default function QuizPage() {
 
         {/* STEP 3: Diet & Food */}
         {step === 3 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <h2 className="display" style={{ fontSize: '28px' }}>{t('quiz_s3_title')}</h2>
+          <div className="flex flex-col gap-6">
+            <h2 className="display text-[28px]">{t('quiz_s3_title')}</h2>
             <div>
-              <label style={labelStyle}>{t('quiz_q_diet')}</label>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <label className={labelClass}>{t('quiz_q_diet')}</label>
+              <div className="flex flex-col gap-2.5">
                 {[
                   { v: 'vegan', l: t('quiz_d_vegan') },
                   { v: 'pure_veg', l: t('quiz_d_veg') },
@@ -197,8 +193,8 @@ export default function QuizPage() {
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_eatout')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_eatout')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: 'Rarely', l: t('quiz_eo_rare') },
                   { v: '1-2x a week', l: t('quiz_eo_1_2') },
@@ -210,8 +206,8 @@ export default function QuizPage() {
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_foodwaste')}</label>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <label className={labelClass}>{t('quiz_q_foodwaste')}</label>
+              <div className="flex flex-col gap-2.5">
                 {[
                   { v: 'Minimal (We repurpose leftovers)', l: t('quiz_fw_min') },
                   { v: 'Average (Some scraps thrown)', l: t('quiz_fw_avg') },
@@ -226,11 +222,11 @@ export default function QuizPage() {
 
         {/* STEP 4: Home Energy */}
         {step === 4 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <h2 className="display" style={{ fontSize: '28px' }}>{t('quiz_s4_title')}</h2>
+          <div className="flex flex-col gap-6">
+            <h2 className="display text-[28px]">{t('quiz_s4_title')}</h2>
             <div>
-              <label style={labelStyle}>{t('quiz_q_lpg')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_lpg')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: 'PNG Piped Gas', l: t('quiz_l_png') },
                   { v: '1-3', l: t('quiz_l_1_3') },
@@ -243,13 +239,13 @@ export default function QuizPage() {
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_elec')}: {answers.electricityUnits} kWh</label>
-              <input type="range" min="0" max="1500" step="50" value={answers.electricityUnits} onChange={e => updateAnswer('electricityUnits', parseInt(e.target.value))} style={{ width: '100%', accentColor: 'var(--color-marigold)' }} />
-              <div style={{ fontSize: '12px', color: 'var(--color-ink)', opacity: 0.5, marginTop: '4px' }}>{t('quiz_elec_hint')}</div>
+              <label className={labelClass}>{t('quiz_q_elec')}: {answers.electricityUnits} kWh</label>
+              <input type="range" min="0" max="1500" step="50" value={answers.electricityUnits} onChange={e => updateAnswer('electricityUnits', parseInt(e.target.value))} className="w-full accent-[var(--color-marigold)]"  />
+              <div className="text-xs text-[var(--color-ink)] opacity-50 mt-1">{t('quiz_elec_hint')}</div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_ac')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_ac')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: 'No AC', l: t('quiz_ac_0') },
                   { v: '1-3 hours', l: t('quiz_ac_1_3') },
@@ -261,8 +257,8 @@ export default function QuizPage() {
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_inverter')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_inverter')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: 'yes', l: t('quiz_yes') },
                   { v: 'no', l: t('quiz_no') }
@@ -276,11 +272,11 @@ export default function QuizPage() {
 
         {/* STEP 5: Shopping & Waste */}
         {step === 5 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <h2 className="display" style={{ fontSize: '28px' }}>{t('quiz_s5_title')}</h2>
+          <div className="flex flex-col gap-6">
+            <h2 className="display text-[28px]">{t('quiz_s5_title')}</h2>
             <div>
-              <label style={labelStyle}>{t('quiz_q_orders')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_orders')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: '0-1', l: t('quiz_o_0_1') },
                   { v: '2-5', l: t('quiz_o_2_5') },
@@ -292,8 +288,8 @@ export default function QuizPage() {
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_clothes')}</label>
-              <div style={btnGroupStyle}>
+              <label className={labelClass}>{t('quiz_q_clothes')}</label>
+              <div className={btnGroupClass}>
                 {[
                   { v: '0', l: t('quiz_cl_0') },
                   { v: '1-2 items', l: t('quiz_cl_1_2') },
@@ -305,8 +301,8 @@ export default function QuizPage() {
               </div>
             </div>
             <div>
-              <label style={labelStyle}>{t('quiz_q_waste')}</label>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <label className={labelClass}>{t('quiz_q_waste')}</label>
+              <div className="flex flex-col gap-2.5">
                 {[
                   { v: 'mixed', l: t('quiz_w_mixed') },
                   { v: 'segregated', l: t('quiz_w_seg') },
@@ -320,19 +316,19 @@ export default function QuizPage() {
         )}
 
         {/* Navigation Controls */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '48px', paddingTop: '24px', borderTop: '1px solid var(--color-line)' }}>
+        <div className="flex justify-between items-center mt-12 pt-6 border-t border-[var(--color-line)]">
           {step > 1 ? (
-            <button onClick={goBack} style={{ fontWeight: 600, color: 'var(--color-ink)', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', border: 'none', background: 'transparent' }}>
+            <button type="button" onClick={goBack} className="font-semibold text-[var(--color-ink)] opacity-60 flex items-center gap-1.5 cursor-pointer border-none bg-transparent">
               {t('quiz_btn_back')}
             </button>
           ) : <div></div>}
 
           {step < 5 ? (
-            <button onClick={goNext} style={{ background: 'var(--color-ink)', color: 'white', padding: '14px 32px', borderRadius: '30px', fontWeight: 700, fontSize: '15px', cursor: 'pointer', border: 'none' }}>
+            <button type="button" onClick={goNext} className="bg-[var(--color-ink)] text-white px-8 py-3.5 rounded-[30px] font-bold text-[15px] cursor-pointer border-none">
               {t('quiz_btn_next')}
             </button>
           ) : (
-            <button onClick={submitQuiz} style={{ background: 'var(--color-marigold)', color: 'white', padding: '14px 32px', borderRadius: '30px', fontWeight: 700, fontSize: '15px', boxShadow: '0 4px 14px rgba(232,93,44,0.3)', cursor: 'pointer', border: 'none' }}>
+            <button type="button" onClick={submitQuiz} className="bg-[var(--color-marigold)] text-white px-8 py-3.5 rounded-[30px] font-bold text-[15px] shadow-[0_4px_14px_rgba(232,93,44,0.3)] cursor-pointer border-none">
               {t('quiz_btn_submit')}
             </button>
           )}

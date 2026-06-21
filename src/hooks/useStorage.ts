@@ -1,4 +1,6 @@
 import { getCurrentUser } from '../utils/auth';
+import { db } from '../firebase';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 // ------------------------------------------------------------------
 // Core Storage Functions (User-Namespaced)
@@ -6,10 +8,18 @@ import { getCurrentUser } from '../utils/auth';
 
 const getNamespacedKey = (userId, baseKey) => `${baseKey}_${userId}`;
 
-export const saveQuizData = (userId, answers) => {
+export const saveQuizData = async (userId, answers) => {
   try {
     localStorage.setItem(getNamespacedKey(userId, 'ecotrace_quiz'), JSON.stringify(answers));
     localStorage.setItem(getNamespacedKey(userId, 'ecotrace_quiz_completed'), 'true');
+    
+    // Persist to Firestore
+    if (userId) {
+      await updateDoc(doc(db, 'users', userId), {
+        quizData: answers,
+        quizCompleted: true
+      });
+    }
   } catch (e) {
     console.error('Storage quota exceeded or disabled.', e);
   }
@@ -24,13 +34,20 @@ export const getQuizData = (userId) => {
   }
 };
 
-export const updateQuizLocation = (userId, city, state) => {
+export const updateQuizLocation = async (userId, city, state) => {
   try {
     const data = getQuizData(userId);
     if (data) {
       data.city = city;
       data.state = state;
       localStorage.setItem(getNamespacedKey(userId, 'ecotrace_quiz'), JSON.stringify(data));
+      
+      if (userId) {
+        await updateDoc(doc(db, 'users', userId), {
+          'quizData.city': city,
+          'quizData.state': state
+        });
+      }
       return data;
     }
   } catch (e) {}
@@ -46,7 +63,7 @@ export const isQuizCompleted = (userId) => {
   }
 };
 
-export const saveMonthlyLog = (userId, monthKey, emissions, score) => {
+export const saveMonthlyLog = async (userId, monthKey, emissions, score) => {
   try {
     const history = getHistory(userId);
     history.push({ month: monthKey, emissions, score, date: new Date().toISOString() });
@@ -55,6 +72,12 @@ export const saveMonthlyLog = (userId, monthKey, emissions, score) => {
     history.sort((a, b) => new Date(a.date) - new Date(b.date));
     
     localStorage.setItem(getNamespacedKey(userId, 'ecotrace_history'), JSON.stringify(history));
+    
+    if (userId) {
+      await updateDoc(doc(db, 'users', userId), {
+        history: history
+      });
+    }
   } catch (e) {
     console.error('Failed to save monthly log', e);
   }
@@ -70,9 +93,14 @@ export const getHistory = (userId) => {
   }
 };
 
-export const saveDailyLog = (userId, dateKey, logData) => {
+export const saveDailyLog = async (userId, dateKey, logData) => {
   try {
     localStorage.setItem(getNamespacedKey(userId, `ecotrace_daily_${dateKey}`), JSON.stringify(logData));
+    if (userId) {
+      await updateDoc(doc(db, 'users', userId), {
+        [`dailyLogs.${dateKey}`]: logData
+      });
+    }
   } catch (e) {
     console.error('Failed to save daily log', e);
   }
@@ -100,12 +128,17 @@ export const getCurrentWeekKey = () => {
   return `${now.getFullYear()}-W${week}`;
 };
 
-export const saveChallengeCompletion = (userId, weekKey, challengeId) => {
+export const saveChallengeCompletion = async (userId, weekKey, challengeId) => {
   try {
     const completed = getCompletedChallenges(userId, weekKey);
     if (!completed.includes(challengeId)) {
       completed.push(challengeId);
       localStorage.setItem(getNamespacedKey(userId, `ecotrace_challenges_${weekKey}`), JSON.stringify(completed));
+      if (userId) {
+        await updateDoc(doc(db, 'users', userId), {
+          [`challenges.${weekKey}`]: completed
+        });
+      }
     }
   } catch (e) {
     console.error('Failed to save challenge', e);
@@ -122,9 +155,14 @@ export const getCompletedChallenges = (userId, weekKey) => {
   }
 };
 
-export const saveStreak = (userId, streakData) => {
+export const saveStreak = async (userId, streakData) => {
   try {
     localStorage.setItem(getNamespacedKey(userId, 'ecotrace_streak'), JSON.stringify(streakData));
+    if (userId) {
+      await updateDoc(doc(db, 'users', userId), {
+        streak: streakData
+      });
+    }
   } catch (e) {
     console.error('Failed to save streak', e);
   }

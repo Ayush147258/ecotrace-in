@@ -1,6 +1,7 @@
 import { formatCO2, formatMoney, formatPercent } from '../utils/formatters';
 import { INDIA_BENCHMARKS } from '../utils/emissionFactors';
 import { useLang } from '../hooks/useLang';
+import PropTypes from 'prop-types';
 
 export default function Dashboard({ emissions, ecoScore, userName, city, state }) {
   const { t } = useLang();
@@ -27,11 +28,11 @@ export default function Dashboard({ emissions, ecoScore, userName, city, state }
 
   // Sort categories to find biggest impacts
   const cats = [
-    { id: 'transport', label: t('dash_transport'), val: emissions.transport, icon: '🛵', bg: 'var(--color-banyan-pale)', fill: 'var(--color-banyan)', hint: t('dash_t_hint') },
-    { id: 'food', label: t('dash_food'), val: emissions.food, icon: '🍛', bg: 'var(--color-marigold-pale)', fill: 'var(--color-marigold)', hint: t('dash_f_hint') },
-    { id: 'energy', label: t('dash_energy'), val: emissions.energy, icon: '🔥', bg: '#F3EBD6', fill: 'var(--color-gold)', hint: t('dash_e_hint') },
-    { id: 'shopping', label: t('dash_shopping'), val: emissions.shopping, icon: '🛍️', bg: 'var(--color-paper-2)', fill: '#8A8166', hint: t('dash_s_hint') },
-    { id: 'waste', label: t('dash_waste'), val: emissions.waste, icon: '🗑️', bg: '#EFE3D0', fill: '#B0A887', hint: t('dash_w_hint') }
+    { id: 'transport', label: t('dash_transport'), val: emissions.transport, icon: '🛵', bgClass: 'bg-[var(--color-banyan-pale)]', fillClass: 'bg-[var(--color-banyan)]', hint: t('dash_t_hint') },
+    { id: 'food', label: t('dash_food'), val: emissions.food, icon: '🍛', bgClass: 'bg-[var(--color-marigold-pale)]', fillClass: 'bg-[var(--color-marigold)]', hint: t('dash_f_hint') },
+    { id: 'energy', label: t('dash_energy'), val: emissions.energy, icon: '🔥', bgClass: 'bg-[#F3EBD6]', fillClass: 'bg-[var(--color-gold)]', hint: t('dash_e_hint') },
+    { id: 'shopping', label: t('dash_shopping'), val: emissions.shopping, icon: '🛍️', bgClass: 'bg-[var(--color-paper-2)]', fillClass: 'bg-[#8A8166]', hint: t('dash_s_hint') },
+    { id: 'waste', label: t('dash_waste'), val: emissions.waste, icon: '🗑️', bgClass: 'bg-[#EFE3D0]', fillClass: 'bg-[#B0A887]', hint: t('dash_w_hint') }
   ].sort((a, b) => b.val - a.val);
 
   return (
@@ -51,7 +52,7 @@ export default function Dashboard({ emissions, ecoScore, userName, city, state }
               <circle cx="115" cy="115" r="100" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="14"/>
               <circle cx="115" cy="115" r="100" fill="none" stroke={ringColor} strokeWidth="14"
                       strokeDasharray={circleCircumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round"
-                      transform="rotate(-90 115 115)" style={{transition: 'stroke-dashoffset 1s ease-out'}}/>
+                      transform="rotate(-90 115 115)" className="transition-[stroke-dashoffset] duration-1000 ease-out"/>
               <circle cx="115" cy="115" r="78" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5"/>
               <g opacity="0.5">
                 <circle cx="115" cy="15" r="2.5" fill="#C99A3B"/>
@@ -81,11 +82,11 @@ export default function Dashboard({ emissions, ecoScore, userName, city, state }
           <div className="hint">{Math.round(emissions.total)} {t('dash_kg_this_month')} · 5 {t('dash_categories')}</div>
           
           {cats.map((c, i) => (
-            <div className="bd-row" key={c.id} style={{ marginBottom: i === 4 ? 0 : 16 }}>
-              <div className="bd-icon" style={{ background: c.bg }}>{c.icon}</div>
+            <div className={`bd-row ${i === 4 ? 'mb-0' : 'mb-4'}`} key={c.id}>
+              <div className={`bd-icon ${c.bgClass}`}>{c.icon}</div>
               <div className="bd-meta">
                 <div className="bd-top"><span>{c.label}</span><span className="val">{Math.round(c.val)} kg</span></div>
-                <div className="bd-track"><div className="bd-fill" style={{ width: getWidth(c.val), background: c.fill }}></div></div>
+                <div className="bd-track"><div className={`bd-fill ${c.fillClass}`} style={{ width: getWidth(c.val) }}></div></div>
                 <div className="bd-compare">{c.hint}</div>
               </div>
             </div>
@@ -122,3 +123,25 @@ export default function Dashboard({ emissions, ecoScore, userName, city, state }
     </>
   );
 }
+
+Dashboard.propTypes = {
+  emissions: PropTypes.shape({
+    transport: PropTypes.number,
+    food: PropTypes.number,
+    energy: PropTypes.number,
+    shopping: PropTypes.number,
+    waste: PropTypes.number,
+    total: PropTypes.number,
+    money_saved_vs_avg: PropTypes.number,
+  }),
+  ecoScore: PropTypes.shape({
+    score: PropTypes.number,
+    grade: PropTypes.string,
+    level: PropTypes.string,
+    percentile: PropTypes.number,
+    vs_india_avg: PropTypes.number,
+  }),
+  userName: PropTypes.string,
+  city: PropTypes.string,
+  state: PropTypes.string,
+};

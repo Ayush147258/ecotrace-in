@@ -89,67 +89,67 @@ export default function ProgressPage() {
   const formatTooltipMoney = (value) => [`₹${Math.round(value)}`, t('prog_money_chart')];
 
   return (
-    <div className="shell" style={{ maxWidth: '960px', margin: '0 auto', paddingBottom: '100px' }}>
-      <h1 className="display" style={{ fontSize: '32px', color: 'var(--color-banyan-deep)', marginBottom: '8px' }}>
+    <div className="shell max-w-[960px] mx-auto pb-[100px]">
+      <h1 className="display text-[32px] text-[var(--color-banyan-deep)] mb-2">
         {t('prog_title')}
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--color-ink)', opacity: 0.6, marginBottom: '32px' }}>
+      <p className="text-[15px] text-[var(--color-ink)] opacity-60 mb-8">
         {t('prog_desc')}
       </p>
 
       {/* Stats Summary Row */}
-      <div className="metrics-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' }}>
-        <div className="card" style={{ padding: '24px', border: '1px solid var(--color-line)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6, marginBottom: '8px' }}>{t('prog_tot_co2')}</div>
-          <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, color: stats.totalCo2Saved >= 0 ? 'var(--color-banyan)' : 'var(--color-marigold)' }}>
-            {stats.totalCo2Saved > 0 ? '+' : ''}{stats.totalCo2Saved} <span style={{ fontSize: '16px', fontWeight: 600, opacity: 0.6, fontFamily: 'var(--font-sans)' }}>kg</span>
+      <div className="metrics-row grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5 mb-8">
+        <div className="card p-6 border border-[var(--color-line)]">
+          <div className="text-xs font-bold uppercase opacity-60 mb-2">{t('prog_tot_co2')}</div>
+          <div className={`text-[32px] font-[family-name:var(--font-serif)] font-bold ${stats.totalCo2Saved >= 0 ? 'text-[var(--color-banyan)]' : 'text-[var(--color-marigold)]'}`}>
+            {stats.totalCo2Saved > 0 ? '+' : ''}{stats.totalCo2Saved} <span className="text-base font-semibold opacity-60 font-[family-name:var(--font-sans)]">kg</span>
           </div>
-          <div style={{ fontSize: '12px', fontWeight: 600, opacity: 0.5, marginTop: '4px' }}>{t('prog_vs_avg')}</div>
+          <div className="text-xs font-semibold opacity-50 mt-1">{t('prog_vs_avg')}</div>
         </div>
 
-        <div className="card" style={{ padding: '24px', border: '1px solid var(--color-line)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6, marginBottom: '8px' }}>{t('prog_tot_inr')}</div>
-          <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, color: stats.totalMoneySaved >= 0 ? 'var(--color-banyan)' : 'var(--color-marigold)' }}>
-            <span style={{ fontSize: '20px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>₹</span>{stats.totalMoneySaved > 0 ? '+' : ''}{stats.totalMoneySaved}
+        <div className="card p-6 border border-[var(--color-line)]">
+          <div className="text-xs font-bold uppercase opacity-60 mb-2">{t('prog_tot_inr')}</div>
+          <div className={`text-[32px] font-[family-name:var(--font-serif)] font-bold ${stats.totalMoneySaved >= 0 ? 'text-[var(--color-banyan)]' : 'text-[var(--color-marigold)]'}`}>
+            <span className="text-xl font-semibold font-[family-name:var(--font-sans)]">₹</span>{stats.totalMoneySaved > 0 ? '+' : ''}{stats.totalMoneySaved}
           </div>
-          <div style={{ fontSize: '12px', fontWeight: 600, opacity: 0.5, marginTop: '4px' }}>{t('prog_inr_hint')}</div>
+          <div className="text-xs font-semibold opacity-50 mt-1">{t('prog_inr_hint')}</div>
         </div>
 
-        <div className="card" style={{ padding: '24px', border: '1px solid var(--color-line)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', opacity: 0.6, marginBottom: '8px' }}>{t('prog_trend')}</div>
-          <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, color: 'var(--color-ink)' }}>
+        <div className="card p-6 border border-[var(--color-line)]">
+          <div className="text-xs font-bold uppercase opacity-60 mb-2">{t('prog_trend')}</div>
+          <div className="text-[32px] font-[family-name:var(--font-serif)] font-bold text-[var(--color-ink)]">
             {stats.latestScore}
           </div>
-          <div style={{ fontSize: '14px', fontWeight: 700, marginTop: '4px', color: stats.ecoScoreTrend >= 0 ? 'var(--color-banyan)' : 'var(--color-marigold)' }}>
+          <div className={`text-sm font-bold mt-1 ${stats.ecoScoreTrend >= 0 ? 'text-[var(--color-banyan)]' : 'text-[var(--color-marigold)]'}`}>
             {stats.ecoScoreTrend > 0 ? '↗' : (stats.ecoScoreTrend < 0 ? '↘' : '→')} {stats.ecoScoreTrend > 0 ? '+' : ''}{stats.ecoScoreTrend} {t('prog_points')}
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '32px', marginBottom: '40px' }}>
+      <div className="grid grid-cols-1 gap-8 mb-10">
         
         {/* Monthly Trend Line Chart */}
-        <div className="card" style={{ padding: '32px', border: '1px solid var(--color-line)', background: 'white' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+        <div className="card p-8 border border-[var(--color-line)] bg-white">
+          <div className="flex justify-between items-start mb-6">
             <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-ink)' }}>{t('prog_monthly_chart')}</h3>
+              <h3 className="text-lg font-bold text-[var(--color-ink)]">{t('prog_monthly_chart')}</h3>
               {isSampleData && (
-                <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-marigold)', background: 'var(--color-marigold-pale)', padding: '4px 10px', borderRadius: '12px', display: 'inline-block', marginTop: '6px' }}>
+                <div className="text-xs font-semibold text-[var(--color-marigold)] bg-[var(--color-marigold-pale)] px-2.5 py-1 rounded-xl inline-block mt-1.5">
                   {t('prog_sample_data')}
                 </div>
               )}
             </div>
-            <div style={{ display: 'flex', gap: '16px', fontSize: '12px', fontWeight: 600, opacity: 0.7 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '12px', height: '3px', background: 'var(--color-banyan)' }}></span> {t('prog_you')}
+            <div className="flex gap-4 text-xs font-semibold opacity-70">
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-[3px] bg-[var(--color-banyan)]"></span> {t('prog_you')}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '12px', height: '3px', borderTop: '2px dashed #9ca3af' }}></span> {t('prog_india')}
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-[3px] border-t-2 border-dashed border-[#9ca3af]"></span> {t('prog_india')}
               </div>
             </div>
           </div>
           
-          <div style={{ height: '300px', width: '100%' }}>
+          <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={historyData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
@@ -168,13 +168,13 @@ export default function ProgressPage() {
         </div>
 
         {/* Money Saved Bar Chart */}
-        <div className="card" style={{ padding: '32px', border: '1px solid var(--color-line)', background: 'white' }}>
-          <div style={{ marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-ink)' }}>{t('prog_money_chart')}</h3>
-            <p style={{ fontSize: '13px', color: 'var(--color-ink)', opacity: 0.6, marginTop: '4px' }}>{t('prog_money_desc')}</p>
+        <div className="card p-8 border border-[var(--color-line)] bg-white">
+          <div className="mb-6">
+            <h3 className="text-lg font-bold text-[var(--color-ink)]">{t('prog_money_chart')}</h3>
+            <p className="text-[13px] text-[var(--color-ink)] opacity-60 mt-1">{t('prog_money_desc')}</p>
           </div>
           
-          <div style={{ height: '260px', width: '100%' }}>
+          <div className="h-[260px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={historyData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />

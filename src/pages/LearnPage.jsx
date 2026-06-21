@@ -18,27 +18,27 @@ export default function LearnPage() {
   ];
 
   return (
-    <div className="shell" style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '100px' }}>
+    <div className="shell max-w-[800px] mx-auto pb-[100px]">
       
-      <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-        <h1 className="display" style={{ fontSize: '42px', color: 'var(--color-banyan-deep)', marginBottom: '16px' }}>
+      <div className="text-center mb-16">
+        <h1 className="display text-[42px] text-[var(--color-banyan-deep)] mb-4">
           {t('learn_title')}
         </h1>
-        <p style={{ fontSize: '18px', color: 'var(--color-ink)', opacity: 0.6, maxWidth: '600px', margin: '0 auto' }}>
+        <p className="text-lg text-[var(--color-ink)] opacity-60 max-w-[600px] mx-auto">
           {t('learn_desc')}
         </p>
       </div>
 
       {/* SECTION 1 */}
-      <div style={{ marginBottom: '64px' }}>
-        <h2 className="display" style={{ fontSize: '28px', color: 'var(--color-ink)', marginBottom: '20px', borderBottom: '2px solid var(--color-line)', paddingBottom: '12px' }}>
+      <div className="mb-16">
+        <h2 className="display text-[28px] text-[var(--color-ink)] mb-5 border-b-2 border-[var(--color-line)] pb-3">
           {t('learn_s1_t')}
         </h2>
-        <div style={{ fontSize: '16px', lineHeight: '1.8', color: 'var(--color-ink)', opacity: 0.85 }}>
-          <p style={{ marginBottom: '16px' }}>
+        <div className="text-base leading-[1.8] text-[var(--color-ink)] opacity-85">
+          <p className="mb-4">
             {t('learn_s1_p1')}
           </p>
-          <p style={{ marginBottom: '16px' }}>
+          <p className="mb-4">
             {t('learn_s1_p2')}
           </p>
           <p>
@@ -48,48 +48,48 @@ export default function LearnPage() {
       </div>
 
       {/* SECTION 2 */}
-      <div style={{ marginBottom: '64px' }}>
-        <h2 className="display" style={{ fontSize: '28px', color: 'var(--color-ink)', marginBottom: '20px', borderBottom: '2px solid var(--color-line)', paddingBottom: '12px' }}>
+      <div className="mb-16">
+        <h2 className="display text-[28px] text-[var(--color-ink)] mb-5 border-b-2 border-[var(--color-line)] pb-3">
           {t('learn_s2_t')}
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
           
-          <div className="card" style={{ padding: '24px', background: 'white', border: '1px solid var(--color-line)' }}>
-            <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, color: 'var(--color-banyan)', marginBottom: '8px' }}>
+          <div className="card p-6 bg-white border border-[var(--color-line)]">
+            <div className="text-[32px] font-[family-name:var(--font-serif)] font-bold text-[var(--color-banyan)] mb-2">
               2.6 Tonnes
             </div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>{t('learn_s2_c1t')}</h3>
-            <p style={{ fontSize: '14px', opacity: 0.7, lineHeight: '1.5' }}>
+            <h3 className="text-base font-bold mb-2">{t('learn_s2_c1t')}</h3>
+            <p className="text-sm opacity-70 leading-relaxed">
               {t('learn_s2_c1d')}
             </p>
           </div>
 
-          <div className="card" style={{ padding: '24px', background: 'white', border: '1px solid var(--color-line)' }}>
-            <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, color: 'var(--color-marigold)', marginBottom: '8px' }}>
+          <div className="card p-6 bg-white border border-[var(--color-line)]">
+            <div className="text-[32px] font-[family-name:var(--font-serif)] font-bold text-[var(--color-marigold)] mb-2">
               6.3 Tonnes
             </div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>{t('learn_s2_c2t')}</h3>
-            <p style={{ fontSize: '14px', opacity: 0.7, lineHeight: '1.5' }}>
+            <h3 className="text-base font-bold mb-2">{t('learn_s2_c2t')}</h3>
+            <p className="text-sm opacity-70 leading-relaxed">
               {t('learn_s2_c2d')}
             </p>
           </div>
 
-          <div className="card" style={{ padding: '24px', background: 'white', border: '1px solid var(--color-line)' }}>
-            <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '8px' }}>
+          <div className="card p-6 bg-white border border-[var(--color-line)]">
+            <div className="text-[32px] font-[family-name:var(--font-serif)] font-bold text-[var(--color-ink)] mb-2">
               ~20%
             </div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>{t('learn_s2_c3t')}</h3>
-            <p style={{ fontSize: '14px', opacity: 0.7, lineHeight: '1.5' }}>
+            <h3 className="text-base font-bold mb-2">{t('learn_s2_c3t')}</h3>
+            <p className="text-sm opacity-70 leading-relaxed">
               {t('learn_s2_c3d')}
             </p>
           </div>
 
-          <div className="card" style={{ padding: '24px', background: 'white', border: '1px solid var(--color-line)' }}>
-            <div style={{ fontSize: '32px', fontFamily: 'var(--font-serif)', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '8px' }}>
+          <div className="card p-6 bg-white border border-[var(--color-line)]">
+            <div className="text-[32px] font-[family-name:var(--font-serif)] font-bold text-[var(--color-ink)] mb-2">
               70%+
             </div>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>{t('learn_s2_c4t')}</h3>
-            <p style={{ fontSize: '14px', opacity: 0.7, lineHeight: '1.5' }}>
+            <h3 className="text-base font-bold mb-2">{t('learn_s2_c4t')}</h3>
+            <p className="text-sm opacity-70 leading-relaxed">
               {t('learn_s2_c4d')}
             </p>
           </div>
@@ -98,33 +98,33 @@ export default function LearnPage() {
       </div>
 
       {/* SECTION 3 */}
-      <div style={{ marginBottom: '64px' }}>
-        <h2 className="display" style={{ fontSize: '28px', color: 'var(--color-ink)', marginBottom: '20px', borderBottom: '2px solid var(--color-line)', paddingBottom: '12px' }}>
+      <div className="mb-16">
+        <h2 className="display text-[28px] text-[var(--color-ink)] mb-5 border-b-2 border-[var(--color-line)] pb-3">
           {t('learn_s3_t')}
         </h2>
-        <div className="card" style={{ padding: '32px', background: 'var(--color-paper-2)', border: 'none' }}>
-          <p style={{ fontSize: '16px', lineHeight: '1.8', opacity: 0.85, marginBottom: '24px' }}>
+        <div className="card p-8 bg-[var(--color-paper-2)] border-none">
+          <p className="text-base leading-[1.8] opacity-85 mb-6">
             {t('learn_s3_d')}
           </p>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div className="flex flex-col gap-5">
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>{t('learn_s3_st1')}</h3>
-              <p style={{ fontSize: '15px', opacity: 0.75, lineHeight: '1.6' }}>
+              <h3 className="text-base font-bold mb-2">{t('learn_s3_st1')}</h3>
+              <p className="text-[15px] opacity-75 leading-[1.6]">
                 {t('learn_s3_sd1')}
               </p>
             </div>
             
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>{t('learn_s3_st2')}</h3>
-              <p style={{ fontSize: '15px', opacity: 0.75, lineHeight: '1.6' }}>
+              <h3 className="text-base font-bold mb-2">{t('learn_s3_st2')}</h3>
+              <p className="text-[15px] opacity-75 leading-[1.6]">
                 {t('learn_s3_sd2')}
               </p>
             </div>
 
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px' }}>{t('learn_s3_st3')}</h3>
-              <p style={{ fontSize: '15px', opacity: 0.75, lineHeight: '1.6' }}>
+              <h3 className="text-base font-bold mb-2">{t('learn_s3_st3')}</h3>
+              <p className="text-[15px] opacity-75 leading-[1.6]">
                 {t('learn_s3_sd3')}
               </p>
             </div>
@@ -134,46 +134,29 @@ export default function LearnPage() {
 
       {/* SECTION 4 */}
       <div>
-        <h2 className="display" style={{ fontSize: '28px', color: 'var(--color-ink)', marginBottom: '20px', borderBottom: '2px solid var(--color-line)', paddingBottom: '12px' }}>
+        <h2 className="display text-[28px] text-[var(--color-ink)] mb-5 border-b-2 border-[var(--color-line)] pb-3">
           {t('learn_s4_t')}
         </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div className="flex flex-col gap-3">
           {faqs.map((faq, index) => {
             const isOpen = openFaq === index;
             return (
               <div 
                 key={index} 
-                className="card" 
-                style={{ 
-                  padding: '0', 
-                  border: `1px solid ${isOpen ? 'var(--color-banyan)' : 'var(--color-line)'}`,
-                  background: isOpen ? 'white' : 'var(--color-paper)',
-                  overflow: 'hidden',
-                  transition: 'all 0.2s'
-                }}
+                className={`card p-0 overflow-hidden transition-all duration-200 border ${isOpen ? 'border-[var(--color-banyan)] bg-white' : 'border-[var(--color-line)] bg-[var(--color-paper)]'}`}
               >
                 <button 
                   onClick={() => toggleFaq(index)}
-                  style={{ 
-                    width: '100%', 
-                    padding: '20px 24px', 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center',
-                    fontSize: '16px',
-                    fontWeight: 700,
-                    color: isOpen ? 'var(--color-banyan-deep)' : 'var(--color-ink)',
-                    textAlign: 'left'
-                  }}
+                  className={`w-full px-6 py-5 flex justify-between items-center text-base font-bold text-left focus:outline-none hover:bg-black/5 focus:bg-black/5 ${isOpen ? 'text-[var(--color-banyan-deep)]' : 'text-[var(--color-ink)]'}`}
                 >
                   {faq.q}
-                  <span style={{ fontSize: '24px', lineHeight: 1, fontWeight: 400, color: isOpen ? 'var(--color-banyan)' : 'var(--color-ink)', opacity: isOpen ? 1 : 0.4 }}>
+                  <span className={`text-2xl leading-none font-normal ${isOpen ? 'text-[var(--color-banyan)] opacity-100' : 'text-[var(--color-ink)] opacity-40'}`}>
                     {isOpen ? '−' : '+'}
                   </span>
                 </button>
                 
                 {isOpen && (
-                  <div style={{ padding: '0 24px 24px 24px', fontSize: '15px', lineHeight: '1.6', color: 'var(--color-ink)', opacity: 0.75 }}>
+                  <div className="px-6 pb-6 text-[15px] leading-[1.6] text-[var(--color-ink)] opacity-75">
                     {faq.a}
                   </div>
                 )}

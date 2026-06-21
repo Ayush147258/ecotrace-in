@@ -27,31 +27,31 @@ export default class ErrorBoundary extends React.Component {
       };
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', textAlign: 'center', background: 'var(--color-paper-1)', padding: '20px' }}>
+        <div className="flex flex-col items-center justify-center min-h-screen text-center bg-[var(--color-paper-1)] p-5">
           
-          <div style={{ background: '#fef2f2', padding: '24px', borderRadius: '50%', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <AlertOctagon size={48} color="#dc2626" />
+          <div className="bg-[#fef2f2] p-6 rounded-full mb-6 flex items-center justify-center">
+            <AlertOctagon size={48} color="#dc2626" aria-hidden="true" />
           </div>
 
-          <h1 style={{ fontSize: '28px', fontWeight: 800, color: 'var(--color-ink)', marginBottom: '16px' }}>
+          <h1 className="text-[28px] font-extrabold text-[var(--color-ink)] mb-4">
             {t('error_title')}
           </h1>
           
-          <p style={{ fontSize: '16px', color: 'var(--color-ink)', opacity: 0.8, maxWidth: '400px', marginBottom: '32px', lineHeight: 1.5 }}>
+          <p className="text-base text-[var(--color-ink)] opacity-80 max-w-[400px] mb-8 leading-relaxed">
             {t('error_desc')}
           </p>
 
           <button 
+            type="button"
             onClick={() => window.location.reload()}
-            className="btn-primary" 
-            style={{ padding: '12px 24px', fontSize: '15px', borderRadius: '30px' }}
+            className="btn-primary px-6 py-3 text-[15px] rounded-[30px]" 
           >
             {t('error_btn_refresh')}
           </button>
           
           {/* Subtle error detail logging for debugging */}
           {process.env.NODE_ENV === 'development' && (
-            <pre style={{ marginTop: '40px', padding: '16px', background: '#f8fafc', borderRadius: '8px', fontSize: '12px', color: '#dc2626', maxWidth: '80%', overflowX: 'auto', textAlign: 'left' }}>
+            <pre className="mt-10 p-4 bg-[#f8fafc] rounded-lg text-xs text-red-600 max-w-[80%] overflow-x-auto text-left">
               {this.state.error?.toString()}
             </pre>
           )}

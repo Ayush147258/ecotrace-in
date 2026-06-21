@@ -62,11 +62,7 @@ export default function LoginPage() {
     }
   };
 
-  const inputStyle = {
-    width: '100%', padding: '12px 16px', borderRadius: '12px',
-    border: '1px solid var(--color-line)', marginBottom: '16px',
-    fontSize: '16px', background: 'white',
-  };
+
 
   return (
     <div className="shell login-shell">
@@ -115,7 +111,7 @@ export default function LoginPage() {
                 minLength={2}
                 value={formData.name}
                 onChange={handleChange}
-                style={inputStyle}
+                className="w-full px-4 py-3 rounded-xl border border-[var(--color-line)] mb-4 text-base bg-white"
               />
             </div>
           )}
@@ -130,7 +126,7 @@ export default function LoginPage() {
               value={formData.email}
               onChange={handleChange}
               aria-invalid={!!error}
-              style={inputStyle}
+              className="w-full px-4 py-3 rounded-xl border border-[var(--color-line)] mb-4 text-base bg-white"
             />
           </div>
           <div className="form-field">
@@ -145,7 +141,7 @@ export default function LoginPage() {
               value={formData.password}
               onChange={handleChange}
               aria-invalid={!!error}
-              style={inputStyle}
+              className="w-full px-4 py-3 rounded-xl border border-[var(--color-line)] mb-4 text-base bg-white"
             />
           </div>
           {!isLoginMode && (
@@ -161,7 +157,7 @@ export default function LoginPage() {
                 value={formData.confirm}
                 onChange={handleChange}
                 aria-invalid={!!error}
-                style={inputStyle}
+                className="w-full px-4 py-3 rounded-xl border border-[var(--color-line)] mb-4 text-base bg-white"
               />
             </div>
           )}

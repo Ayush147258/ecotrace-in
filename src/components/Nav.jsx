@@ -84,7 +84,7 @@ export default function Nav() {
         <div className="nav-right">
           <LangToggle />
 
-          <div style={{ position: 'relative' }} ref={menuRef}>
+          <div className="relative" ref={menuRef}>
             <button
               type="button"
               className="avatar"
@@ -100,12 +100,7 @@ export default function Nav() {
               <div
                 role="menu"
                 aria-label={t('a11y_user_menu')}
-                style={{
-                  position: 'absolute', top: '48px', right: 0,
-                  background: 'white', border: '1px solid var(--color-line)',
-                  borderRadius: '12px', padding: '8px', width: '140px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.1)', zIndex: 100,
-                }}
+                className="absolute top-12 right-0 bg-white border border-[var(--color-line)] rounded-xl p-2 w-[140px] shadow-[0_8px_24px_rgba(0,0,0,0.1)] z-[100]"
               >
                 <button
                   type="button"
@@ -114,12 +109,7 @@ export default function Nav() {
                     logout();
                     window.location.href = '/';
                   }}
-                  style={{
-                    width: '100%', padding: '10px 12px', textAlign: 'left',
-                    background: 'transparent', border: 'none',
-                    color: 'var(--color-marigold)', fontWeight: 600,
-                    cursor: 'pointer', borderRadius: '8px', fontSize: '14px',
-                  }}
+                  className="w-full py-2.5 px-3 text-left bg-transparent border-none text-[var(--color-marigold)] font-semibold cursor-pointer rounded-lg text-sm"
                 >
                   {t('nav_logout')}
                 </button>

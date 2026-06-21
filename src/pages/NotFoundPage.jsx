@@ -8,33 +8,31 @@ export default function NotFoundPage() {
   const user = getCurrentUser();
 
   return (
-    <div className="shell" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh', textAlign: 'center' }}>
+    <div className="shell flex flex-col items-center justify-center min-h-[80vh] text-center">
       
-      <div style={{ background: 'var(--color-paper-2)', padding: '32px', borderRadius: '50%', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <MapPinOff size={64} color="var(--color-ink)" opacity={0.6} />
+      <div className="bg-[var(--color-paper-2)] p-8 rounded-full mb-6 flex items-center justify-center">
+        <MapPinOff size={64} color="var(--color-ink)" opacity={0.6} aria-hidden="true" />
       </div>
 
-      <h1 style={{ fontSize: '32px', fontWeight: 800, color: 'var(--color-banyan-deep)', marginBottom: '16px' }}>
+      <h1 className="text-[32px] font-extrabold text-[var(--color-banyan-deep)] mb-4">
         {t('notfound_title')}
       </h1>
       
-      <p style={{ fontSize: '18px', color: 'var(--color-ink)', opacity: 0.8, maxWidth: '400px', marginBottom: '32px', lineHeight: 1.5 }}>
+      <p className="text-lg text-[var(--color-ink)] opacity-80 max-w-[400px] mb-8 leading-relaxed">
         {t('notfound_desc')}
       </p>
 
       {user ? (
         <Link 
           to="/dashboard" 
-          className="btn-primary" 
-          style={{ padding: '14px 32px', fontSize: '16px', borderRadius: '30px' }}
+          className="btn-primary px-8 py-[14px] text-base rounded-[30px]"
         >
           {t('notfound_btn_dash')}
         </Link>
       ) : (
         <Link 
           to="/" 
-          className="btn-primary" 
-          style={{ padding: '14px 32px', fontSize: '16px', borderRadius: '30px' }}
+          className="btn-primary px-8 py-[14px] text-base rounded-[30px]"
         >
           {t('notfound_btn_home')}
         </Link>

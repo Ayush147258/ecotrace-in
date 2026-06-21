@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { Settings, LogOut, RefreshCw, UserPlus, Check } from 'lucide-react';
 import { useLang } from '../hooks/useLang';
 import { useStorage } from '../hooks/useStorage';
@@ -98,72 +99,74 @@ export default function ProfileSettings({ onUpdate }) {
     setIsSigningUp(false);
   };
 
-  const inputStyle = { width: '100%', padding: '12px 16px', borderRadius: '12px', border: '1px solid var(--color-line)', marginBottom: '16px', fontSize: '15px', background: 'white' };
+  const inputClass = "w-full px-4 py-3 rounded-xl border border-[var(--color-line)] mb-4 text-[15px] bg-white";
+  const labelClass = "block text-sm font-semibold text-[var(--color-ink)] opacity-70 mb-2";
 
   return (
-    <div style={{ marginBottom: '24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+    <div className="mb-6">
+      <div className="flex justify-end">
         <button 
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: '1px solid var(--color-line)', padding: '10px 16px', borderRadius: '20px', fontSize: '14px', fontWeight: 600, color: 'var(--color-ink)', cursor: 'pointer', transition: 'all 0.2s' }}
+          className="flex items-center gap-2 bg-white border border-[var(--color-line)] py-2.5 px-4 rounded-[20px] text-sm font-semibold text-[var(--color-ink)] cursor-pointer transition-all duration-200"
         >
-          <Settings size={16} />
+          <Settings size={16} aria-hidden="true" />
           {t('profile_title')}
         </button>
       </div>
 
       {isOpen && (
-        <div className="card" style={{ marginTop: '16px', padding: '32px', background: 'var(--color-paper-2)', animation: 'slideDown 0.3s ease-out' }}>
+        <div className="card mt-4 p-8 bg-[var(--color-paper-2)] animate-[slideDown_0.3s_ease-out]">
           
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--color-banyan-deep)', marginBottom: '24px' }}>
+          <h2 className="text-2xl font-bold text-[var(--color-banyan-deep)] mb-6">
             {t('profile_title')}
           </h2>
 
           {/* GUEST BANNER */}
           {user.isGuest && (
-            <div style={{ background: 'var(--color-marigold-pale)', border: '1px solid var(--color-marigold)', borderRadius: '12px', padding: '20px', marginBottom: '32px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                <div style={{ background: 'white', borderRadius: '50%', padding: '8px', color: 'var(--color-marigold)' }}>
-                  <UserPlus size={24} />
+            <div className="bg-[var(--color-marigold-pale)] border border-[var(--color-marigold)] rounded-xl p-5 mb-8">
+              <div className="flex items-start gap-4">
+                <div className="bg-white rounded-full p-2 text-[var(--color-marigold)]">
+                  <UserPlus size={24} aria-hidden="true" />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-ink)', marginBottom: '4px' }}>
+                <div className="flex-1">
+                  <h3 className="text-base font-bold text-[var(--color-ink)] mb-1">
                     {t('profile_guest_banner')}
                   </h3>
-                  <p style={{ fontSize: '14px', color: 'var(--color-ink)', opacity: 0.8, marginBottom: '16px' }}>
+                  <p className="text-sm text-[var(--color-ink)] opacity-80 mb-4">
                     Converting your guest account will safely move all your quiz answers, logs, and streaks into a permanent profile.
                   </p>
                   
                   {!showSignup ? (
                     <button 
+                      type="button"
                       onClick={() => setShowSignup(true)}
-                      className="btn-primary" 
-                      style={{ padding: '8px 20px', fontSize: '14px' }}
+                      className="btn-primary px-5 py-2 text-sm" 
                     >
                       {t('profile_create_account')}
                     </button>
                   ) : (
-                    <form onSubmit={handleCreateAccount} style={{ background: 'white', padding: '20px', borderRadius: '12px', marginTop: '16px' }}>
+                    <form onSubmit={handleCreateAccount} className="bg-white p-5 rounded-xl mt-4">
                       <input 
                         type="email" 
                         placeholder={t('profile_email')}
                         value={signupForm.email}
                         onChange={(e) => setSignupForm({...signupForm, email: e.target.value})}
-                        style={inputStyle}
+                        className={inputClass}
                       />
                       <input 
                         type="password" 
                         placeholder={t('profile_password')}
                         value={signupForm.password}
                         onChange={(e) => setSignupForm({...signupForm, password: e.target.value})}
-                        style={inputStyle}
+                        className={inputClass}
                       />
-                      {signupError && <p style={{ color: 'red', fontSize: '14px', marginBottom: '16px' }}>{signupError}</p>}
-                      <div style={{ display: 'flex', gap: '12px' }}>
-                        <button type="submit" className="btn-primary" style={{ padding: '10px 24px', fontSize: '14px' }} disabled={isSigningUp}>
+                      {signupError && <p className="text-red-500 text-sm mb-4">{signupError}</p>}
+                      <div className="flex gap-3">
+                        <button type="submit" className="btn-primary px-6 py-2.5 text-sm" disabled={isSigningUp}>
                           {isSigningUp ? t('profile_creating') : t('profile_create_account')}
                         </button>
-                        <button type="button" onClick={() => setShowSignup(false)} style={{ background: 'transparent', border: 'none', fontSize: '14px', fontWeight: 600, color: 'var(--color-ink)', opacity: 0.6, cursor: 'pointer' }}>
+                        <button type="button" onClick={() => setShowSignup(false)} className="bg-transparent border-none text-sm font-semibold text-[var(--color-ink)] opacity-60 cursor-pointer">
                           Cancel
                         </button>
                       </div>
@@ -174,67 +177,69 @@ export default function ProfileSettings({ onUpdate }) {
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5 mb-8">
             <div>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: 'var(--color-ink)', opacity: 0.7, marginBottom: '8px' }}>
+              <label className={labelClass}>
                 {t('profile_name')}
               </label>
               <input 
                 type="text" 
                 value={name} 
                 onChange={(e) => setName(e.target.value)} 
-                style={inputStyle} 
+                className={inputClass} 
               />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: 'var(--color-ink)', opacity: 0.7, marginBottom: '8px' }}>
+              <label className={labelClass}>
                 {t('profile_city')}
               </label>
               <input 
                 type="text" 
                 value={city} 
                 onChange={(e) => setCity(e.target.value)} 
-                style={inputStyle} 
+                className={inputClass} 
               />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: 'var(--color-ink)', opacity: 0.7, marginBottom: '8px' }}>
+              <label className={labelClass}>
                 {t('profile_state')}
               </label>
               <input 
                 type="text" 
                 value={stateName} 
                 onChange={(e) => setStateName(e.target.value)} 
-                style={inputStyle} 
+                className={inputClass} 
               />
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px', borderBottom: '1px solid var(--color-line)', paddingBottom: '32px' }}>
+          <div className="flex items-center gap-4 mb-10 border-b border-[var(--color-line)] pb-8">
             <button 
+              type="button"
               onClick={handleSaveProfile} 
-              className="btn-primary" 
-              style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              className="btn-primary flex items-center gap-2" 
               disabled={isSaving}
             >
-              {saveSuccess ? <Check size={18} /> : null}
+              {saveSuccess ? <Check size={18} aria-hidden="true" /> : null}
               {saveSuccess ? t('profile_saved') : t('profile_save')}
             </button>
           </div>
 
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <div className="flex gap-4 flex-wrap">
             <button 
+              type="button"
               onClick={handleRetake}
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: '1px solid var(--color-line)', padding: '12px 24px', borderRadius: '12px', fontSize: '15px', fontWeight: 600, color: 'var(--color-ink)', cursor: 'pointer' }}
+              className="flex items-center gap-2 bg-white border border-[var(--color-line)] px-6 py-3 rounded-xl text-[15px] font-semibold text-[var(--color-ink)] cursor-pointer"
             >
-              <RefreshCw size={18} />
+              <RefreshCw size={18} aria-hidden="true" />
               {t('profile_retake')}
             </button>
             <button 
+              type="button"
               onClick={handleLogout}
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: '1px solid var(--color-line)', padding: '12px 24px', borderRadius: '12px', fontSize: '15px', fontWeight: 600, color: 'red', cursor: 'pointer' }}
+              className="flex items-center gap-2 bg-white border border-[var(--color-line)] px-6 py-3 rounded-xl text-[15px] font-semibold text-red-500 cursor-pointer"
             >
-              <LogOut size={18} />
+              <LogOut size={18} aria-hidden="true" />
               {t('profile_logout')}
             </button>
           </div>
@@ -244,3 +249,7 @@ export default function ProfileSettings({ onUpdate }) {
     </div>
   );
 }
+
+ProfileSettings.propTypes = {
+  onUpdate: PropTypes.func,
+};

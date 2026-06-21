@@ -55,7 +55,7 @@ export default function Challenges() {
       {activeChallenges.map(c => {
         const isDone = completedIds.includes(c.id);
         return (
-          <div className="chal-row" key={c.id} onClick={() => toggleChallenge(c.id)}>
+          <button type="button" className="chal-row w-full text-left bg-transparent border-none p-0 cursor-pointer" key={c.id} onClick={() => toggleChallenge(c.id)}>
             <div className={`chal-check ${isDone ? 'done' : ''}`}>{isDone ? '✓' : ''}</div>
             <div className="chal-text">
               <div className={`chal-title ${isDone ? 'done' : ''}`}>{c.title}</div>
@@ -63,11 +63,11 @@ export default function Challenges() {
                 {isDone ? t('chal_saved') : t('chal_saves')} {c.co2SavedKg} kg CO₂ · ₹{c.moneySavedInr}
               </div>
             </div>
-          </div>
+          </button>
         );
       })}
       
-      <Link to="/challenges" style={{ display: 'block', textAlign: 'center', marginTop: '16px', color: 'var(--color-banyan)', fontWeight: 600, textDecoration: 'none', fontSize: '14px' }}>
+      <Link to="/challenges" className="block text-center mt-4 text-[var(--color-banyan)] font-semibold no-underline text-sm">
         View all challenges →
       </Link>
     </div>
