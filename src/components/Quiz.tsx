@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getCurrentUser } from '../utils/auth';
 import { useLang } from '../hooks/useLang';
+import { useAuth } from '../contexts/AuthContext';
+import { useStorage } from '../hooks/useStorage';
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana',
@@ -17,6 +19,8 @@ export default function QuizPage() {
   const navigate = useNavigate();
   const user = getCurrentUser();
   const { t } = useLang();
+  const { setQuizCompleted } = useAuth();
+  const { saveQuizData } = useStorage();
 
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState({
@@ -57,11 +61,9 @@ export default function QuizPage() {
   const goNext = () => setStep(s => Math.min(5, s + 1));
   const goBack = () => setStep(s => Math.max(1, s - 1));
 
-  const submitQuiz = () => {
-    if (user) {
-      localStorage.setItem(`ecotrace_quiz_${user.id}`, JSON.stringify(answers));
-      localStorage.setItem(`ecotrace_quiz_completed_${user.id}`, 'true');
-    }
+  const submitQuiz = async () => {
+    await saveQuizData(answers);
+    setQuizCompleted(true);
     navigate('/dashboard');
   };
 

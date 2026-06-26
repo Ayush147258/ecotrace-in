@@ -1,4 +1,4 @@
-import { getCurrentUser } from '../utils/auth';
+import { clearDemoSession, getCurrentUser, isDemoUserId } from '../utils/auth';
 import { db } from '../firebase';
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 
@@ -14,7 +14,7 @@ export const saveQuizData = async (userId, answers) => {
     localStorage.setItem(getNamespacedKey(userId, 'ecotrace_quiz_completed'), 'true');
     
     // Persist to Firestore
-    if (userId) {
+    if (userId && !isDemoUserId(userId)) {
       await updateDoc(doc(db, 'users', userId), {
         quizData: answers,
         quizCompleted: true
@@ -42,7 +42,7 @@ export const updateQuizLocation = async (userId, city, state) => {
       data.state = state;
       localStorage.setItem(getNamespacedKey(userId, 'ecotrace_quiz'), JSON.stringify(data));
       
-      if (userId) {
+      if (userId && !isDemoUserId(userId)) {
         await updateDoc(doc(db, 'users', userId), {
           'quizData.city': city,
           'quizData.state': state
@@ -73,7 +73,7 @@ export const saveMonthlyLog = async (userId, monthKey, emissions, score) => {
     
     localStorage.setItem(getNamespacedKey(userId, 'ecotrace_history'), JSON.stringify(history));
     
-    if (userId) {
+    if (userId && !isDemoUserId(userId)) {
       await updateDoc(doc(db, 'users', userId), {
         history: history
       });
@@ -96,7 +96,7 @@ export const getHistory = (userId) => {
 export const saveDailyLog = async (userId, dateKey, logData) => {
   try {
     localStorage.setItem(getNamespacedKey(userId, `ecotrace_daily_${dateKey}`), JSON.stringify(logData));
-    if (userId) {
+    if (userId && !isDemoUserId(userId)) {
       await updateDoc(doc(db, 'users', userId), {
         [`dailyLogs.${dateKey}`]: logData
       });
@@ -134,7 +134,7 @@ export const saveChallengeCompletion = async (userId, weekKey, challengeId) => {
     if (!completed.includes(challengeId)) {
       completed.push(challengeId);
       localStorage.setItem(getNamespacedKey(userId, `ecotrace_challenges_${weekKey}`), JSON.stringify(completed));
-      if (userId) {
+      if (userId && !isDemoUserId(userId)) {
         await updateDoc(doc(db, 'users', userId), {
           [`challenges.${weekKey}`]: completed
         });
@@ -158,7 +158,7 @@ export const getCompletedChallenges = (userId, weekKey) => {
 export const saveStreak = async (userId, streakData) => {
   try {
     localStorage.setItem(getNamespacedKey(userId, 'ecotrace_streak'), JSON.stringify(streakData));
-    if (userId) {
+    if (userId && !isDemoUserId(userId)) {
       await updateDoc(doc(db, 'users', userId), {
         streak: streakData
       });

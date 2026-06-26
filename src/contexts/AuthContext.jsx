@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+import { DEMO_USER_ID, getDemoUser } from '../utils/auth';
 
 const AuthContext = createContext();
 
@@ -15,20 +16,35 @@ export function AuthProvider({ children }) {
   const [quizCompleted, setQuizCompleted] = useState(false);
 
   useEffect(() => {
+    const applyDemoSession = () => {
+      const demoUser = getDemoUser();
+      if (!demoUser) return false;
+
+      setCurrentUser(demoUser);
+      setQuizCompleted(localStorage.getItem(`ecotrace_quiz_completed_${DEMO_USER_ID}`) === 'true');
+      setLoading(false);
+      return true;
+    };
+
+    const handleDemoAuthChange = () => {
+      if (!applyDemoSession()) {
+        setCurrentUser(auth.currentUser);
+        setQuizCompleted(false);
+        setLoading(false);
+      }
+    };
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (applyDemoSession()) return;
+
       if (user) {
         setCurrentUser(user);
-        // Check if user has completed the quiz in Firestore
         try {
           const userDocRef = doc(db, 'users', user.uid);
           const docSnap = await getDoc(userDocRef);
-          if (docSnap.exists() && docSnap.data().quizCompleted) {
-            setQuizCompleted(true);
-          } else {
-            setQuizCompleted(false);
-          }
+          setQuizCompleted(!!(docSnap.exists() && docSnap.data().quizCompleted));
         } catch (e) {
-          console.error("Error fetching user data", e);
+          console.error('Error fetching user data', e);
           setQuizCompleted(false);
         }
       } else {
@@ -38,7 +54,12 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    return unsubscribe;
+    window.addEventListener('ecotrace-demo-auth-changed', handleDemoAuthChange);
+
+    return () => {
+      window.removeEventListener('ecotrace-demo-auth-changed', handleDemoAuthChange);
+      unsubscribe();
+    };
   }, []);
 
   const value = {
