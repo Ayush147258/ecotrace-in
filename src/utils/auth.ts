@@ -1,4 +1,4 @@
-﻿import { auth, db } from '../firebase';
+import { auth, db } from '../firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -24,6 +24,22 @@ export interface UserProfile {
 
 function isTestMode() {
   return import.meta.env?.MODE === 'test';
+}
+
+function getAuthErrorMessage(error: any, action: 'login' | 'signup') {
+  switch (error?.code) {
+    case 'auth/email-already-in-use': return 'An account already exists for this email. Try logging in instead.';
+    case 'auth/invalid-credential':
+    case 'auth/user-not-found':
+    case 'auth/wrong-password': return 'Incorrect email or password.';
+    case 'auth/invalid-email': return 'Enter a valid email address.';
+    case 'auth/weak-password': return 'Use a stronger password with at least 6 characters.';
+    case 'auth/operation-not-allowed': return 'Email/password sign-in is not enabled for this app.';
+    case 'auth/network-request-failed': return 'Could not reach Firebase. Check your connection and try again.';
+    case 'auth/too-many-requests': return 'Too many attempts. Please wait a moment and try again.';
+    case 'auth/unauthorized-domain': return 'This website domain is not authorized in Firebase.';
+    default: return action === 'login' ? 'Unable to log in. Please try again.' : 'Unable to create the account. Please try again.';
+  }
 }
 
 function readJson<T>(key: string, fallback: T): T {
@@ -133,20 +149,22 @@ export async function signUp(name: string, email: string, password: string): Pro
 
     await updateProfile(user, { displayName: sanitizedName });
 
-    await setDoc(doc(db, 'users', user.uid), {
-      name: sanitizedName,
-      email: normalizedEmail,
-      createdAt: new Date().toISOString(),
-      quizCompleted: false,
-      streak: { current: 0, longest: 0, lastLogDate: null }
-    });
+    // Do not report account creation as failed if only profile storage is unavailable.
+    try {
+      await setDoc(doc(db, 'users', user.uid), {
+        name: sanitizedName,
+        email: normalizedEmail,
+        createdAt: new Date().toISOString(),
+        quizCompleted: false,
+        streak: { current: 0, longest: 0, lastLogDate: null }
+      });
+    } catch (profileError) {
+      console.error('Account created, but profile data could not be saved.', profileError);
+    }
 
     return { success: true };
   } catch (error: any) {
-    let errorMessage = 'An error occurred during sign up.';
-    if (error.code === 'auth/email-already-in-use') errorMessage = 'Email already in use.';
-    if (error.code === 'auth/weak-password') errorMessage = 'Password is too weak.';
-    return { success: false, error: errorMessage };
+    return { success: false, error: getAuthErrorMessage(error, 'signup') };
   }
 }
 
@@ -156,10 +174,15 @@ export async function logIn(email: string, password: string): Promise<{ success:
   if (isTestMode()) return logInLocally(email, password);
 
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (!isValidEmail(normalizedEmail) || !isValidPassword(password)) {
+      return { success: false, error: 'Enter a valid email and password.' };
+    }
+
+    await signInWithEmailAndPassword(auth, normalizedEmail, password);
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: 'Invalid email or password.' };
+    return { success: false, error: getAuthErrorMessage(error, 'login') };
   }
 }
 

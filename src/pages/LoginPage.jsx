@@ -7,6 +7,7 @@ export default function LoginPage() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirm: '' });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const { t } = useLang();
@@ -23,13 +24,16 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (isSubmitting) return;
 
     if (isLoginMode) {
       if (!formData.email || !formData.password) {
         setError('Please fill in all fields');
         return;
       }
+      setIsSubmitting(true);
       const result = await logIn(formData.email, formData.password);
+      setIsSubmitting(false);
       if (result.success) {
         navigate('/quiz');
       } else {
@@ -53,7 +57,9 @@ export default function LoginPage() {
         return;
       }
 
+      setIsSubmitting(true);
       const result = await signUp(formData.name, formData.email, formData.password);
+      setIsSubmitting(false);
       if (result.success) {
         navigate('/quiz');
       } else {
@@ -162,8 +168,8 @@ export default function LoginPage() {
             </div>
           )}
 
-          <button type="submit" className="btn-primary login-submit">
-            {isLoginMode ? t('login_btn_login') : t('login_btn_signup')}
+          <button type="submit" className="btn-primary login-submit" disabled={isSubmitting}>
+            {isSubmitting ? (isLoginMode ? 'Logging in...' : 'Creating account...') : (isLoginMode ? t('login_btn_login') : t('login_btn_signup'))}
           </button>
         </form>
 
